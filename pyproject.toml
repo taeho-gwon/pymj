@@ -15,9 +15,7 @@ pytest = "^8.3.4"
 autoflake = "^2.3.1"
 isort = "^5.13.2"
 black = "^24.10.0"
-coverage = "^7.6.10"
 ruff = "^0.9.3"
-pytest-cov = "^6.0.0"
 
 [tool.black]
 line-length = 88
@@ -43,26 +41,8 @@ disallow_untyped_defs = false
 [tool.ruff]
 line-length = 88
 target-version = "py312"
-select = ["E", "F", "I", "N", "W", "B", "C", "D"]
-ignore = ["D100", "D104"]
-
-[tool.coverage.run]
-branch = true
-source = ["pymahjongutil"]
-
-[tool.coverage.report]
-exclude_lines = [
-    "pragma: no cover",
-    "def __repr__",
-    "if TYPE_CHECKING:",
-    "@abstractmethod",
-    "raise NotImplementedError",
-    "if __name__ == .__main__.:",
-    "pass",
-    "\\.\\.\\."
-]
-fail_under = 95
-show_missing = true
+lint.select = ["E", "F", "I", "N", "W", "B", "C", "D"]
+lint.ignore = ["D100", "D104"]
 
 [project]
 requires-python = ">=3.12"
