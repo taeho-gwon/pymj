@@ -2,7 +2,7 @@ from enum import Enum, auto
 
 
 class TileType(Enum):
-    """Enum class for Tile Type (etc. manzu, pinzu, souzu...)."""
+    """Represents the main types of Mahjong tiles."""
 
     MAN = auto()
     PIN = auto()
