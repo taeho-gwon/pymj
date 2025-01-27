@@ -5,10 +5,6 @@ labels: ["feature"]
 projects: ["taeho-gwon/1"]
 assignees: ["taeho-gwon"]
 body:
-  - type: markdown
-    attributes:
-      value: |
-        **What to migrate**
   - type: textarea
     attributes:
       label: Migration target
