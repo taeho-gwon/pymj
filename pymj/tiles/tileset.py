@@ -9,10 +9,7 @@ class Tileset:
     """Manages the complete set of Mahjong tiles."""
 
     def __init__(self) -> None:
-        """Initialize the complete Mahjong tileset.
-
-        Creates tile suits for all tile types.
-        """
+        """Initialize the complete Mahjong tileset."""
         self._all_tiles: list[Tile] = list(self._initialize_all_tiles())
 
     @staticmethod
