@@ -1,0 +1,66 @@
+name: PR Automation
+
+on:
+  pull_request:
+    types: [opened, reopened]
+
+jobs:
+  pr_automation:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Configure PR
+        uses: actions/github-script@v6
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          script: |
+            const pr = context.payload.pull_request;
+            const branchName = pr.head.ref;
+
+            // 브랜치 이름에서 이슈 번호를 추출합니다
+            const issueMatch = branchName.match(/^#?(\d+)-/);
+
+            if (!issueMatch) {
+              console.log('이슈 번호를 찾을 수 없습니다:', branchName);
+              return;
+            }
+
+            const issueNumber = parseInt(issueMatch[1]);
+
+            try {
+              // 이슈 정보를 가져옵니다
+              const issue = await github.rest.issues.get({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                issue_number: issueNumber
+              });
+
+              // PR 제목을 이슈 제목과 동일하게 설정합니다
+              const newTitle = `[#${issueNumber}] ${issue.data.title}`;
+
+              await github.rest.pulls.update({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                pull_number: pr.number,
+                title: newTitle,
+                body: `This PR implements the changes for issue #${issueNumber}`
+              });
+
+              await github.rest.issues.addLabels({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                issue_number: pr.number,
+                labels: ['in-progress']
+              });
+
+              // 이슈에 PR 상태 업데이트
+              await github.rest.issues.createComment({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                issue_number: issueNumber,
+                body: `🔗 PR #${pr.number} 작업이 시작되었습니다.`
+              });
+
+            } catch (error) {
+              console.error('PR 설정 중 에러 발생:', error);
+              core.setFailed(error.message);
+            }
