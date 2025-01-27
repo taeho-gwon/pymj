@@ -9,7 +9,10 @@ body:
     attributes:
       value: |
         **What to migrate**
-        Describe what to migrate.
-
-        **Additional context**
-        Add any other context or screenshots about the feature request here.
+  - type: textarea
+    attributes:
+      label: Migration target
+      description: Write down the migration target from pymahjongutil
+      placeholder: migration target
+    validations:
+      required: true
