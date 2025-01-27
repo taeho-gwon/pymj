@@ -1,4 +1,4 @@
-from itertools import chain, repeat
+from itertools import repeat
 from typing import Iterable
 
 from pymj.enums.tile_type import TileType
@@ -23,10 +23,8 @@ class Tileset:
     def _create_one_type(
         tile_type: TileType, values: Iterable, tile_cnt: int
     ) -> Iterable[Tile]:
-        yield from chain(
-            Tileset._create_one_tile(Tile(tile_type, value), tile_cnt)
-            for value in values
-        )
+        for value in values:
+            yield from Tileset._create_one_tile(Tile(tile_type, value), tile_cnt)
 
     @staticmethod
     def _initialize_all_tiles() -> Iterable[Tile]:
@@ -45,6 +43,6 @@ class Tileset:
         """Return tileset iterable."""
         yield from self._all_tiles
 
-    def get_tiles(self) -> list[Tile]:
+    def get_all_tiles(self) -> list[Tile]:
         """Return shallow copy of tileset list."""
         return self._all_tiles[:]
