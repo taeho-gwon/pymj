@@ -1,0 +1,15 @@
+name: New Feature For Migration
+description: New Feature For Migration Pymahjongutil.
+title: "[MIG]: "
+labels: ["feature"]
+projects: ["taeho-gwon/1"]
+assignees: ["taeho-gwon"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        **What to migrate**
+        Describe what to migrate.
+
+        **Additional context**
+        Add any other context or screenshots about the feature request here.
