@@ -24,7 +24,7 @@ class TileCount:
 
     def __init__(self, counts: list[int] | None = None) -> None:
         """Initialize tile count class."""
-        self._counts: list[int] = counts if counts else [0] * 34
+        self._counts: list[int] = counts[:] if counts else [0] * 34
 
     @property
     def num_tiles(self) -> int:
