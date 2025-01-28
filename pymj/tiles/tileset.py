@@ -18,7 +18,7 @@ class Tileset:
 
     @staticmethod
     def _create_one_type(
-        tile_type: TileType, values: Iterable, tile_cnt: int
+        tile_type: TileType, values: Iterable[int], tile_cnt: int
     ) -> Iterable[Tile]:
         for value in values:
             yield from Tileset._create_one_tile(Tile(tile_type, value), tile_cnt)

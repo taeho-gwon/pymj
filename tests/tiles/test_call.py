@@ -92,6 +92,5 @@ from pymj.tiles.tile import Tile
     ],
 )
 def test_call(tiles, call_type, context):
-    """Check valid calls run normally and invalid calls raise error."""
     with context:
         Call(tiles, call_type)
