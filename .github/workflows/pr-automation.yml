@@ -1,0 +1,61 @@
+name: PR Automation
+
+on:
+  pull_request:
+    types: [opened, reopened]
+
+permissions:
+  issues: write
+  pull-requests: write
+  contents: read
+  repository-projects: write
+
+jobs:
+  pr_automation:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Configure PR
+        uses: actions/github-script@v6
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          script: |
+            const pr = context.payload.pull_request;
+            const branchName = pr.head.ref;
+
+            const issueMatch = branchName.match(/^#?(\d+)-/);
+
+            if (!issueMatch) {
+              console.log('Cannot find issue number:', branchName);
+              return;
+            }
+
+            const issueNumber = parseInt(issueMatch[1]);
+            try {
+              const issue = await github.rest.issues.get({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                issue_number: issueNumber
+              });
+
+              const newTitle = `[#${issueNumber}] ${issue.data.title}`;
+
+              await github.rest.pulls.update({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                pull_number: pr.number,
+                title: newTitle,
+                body: `This PR implements the changes for issue #${issueNumber}`
+              });
+
+              // 이슈에 PR 상태 업데이트
+              await github.rest.issues.createComment({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                issue_number: issueNumber,
+                body: `🔗 이 이슈에 대한 작업이 진행 중입니다. 관련 PR: #${pr.number}`
+              });
+
+            } catch (error) {
+              console.error('PR 설정 중 에러 발생:', error);
+              core.setFailed(error.message);
+            }
