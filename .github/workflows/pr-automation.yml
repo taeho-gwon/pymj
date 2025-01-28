@@ -30,7 +30,6 @@ jobs:
             }
 
             const issueNumber = parseInt(issueMatch[1]);
-
             try {
               const issue = await github.rest.issues.get({
                 owner: context.repo.owner,
@@ -48,18 +47,12 @@ jobs:
                 body: `This PR implements the changes for issue #${issueNumber}`
               });
 
-              await github.rest.issues.addLabels({
-                owner: context.repo.owner,
-                repo: context.repo.repo,
-                issue_number: pr.number,
-                labels: ['in-progress']
-              });
-
+              // 이슈에 PR 상태 업데이트
               await github.rest.issues.createComment({
                 owner: context.repo.owner,
                 repo: context.repo.repo,
                 issue_number: issueNumber,
-                body: `🔗 PR #${pr.number} 작업이 시작되었습니다.`
+                body: `🔗 이 이슈에 대한 작업이 진행 중입니다. 관련 PR: #${pr.number}`
               });
 
             } catch (error) {
