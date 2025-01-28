@@ -35,7 +35,6 @@ repos:
     hooks:
     -   id: mypy
         entry: bash -c 'poetry install --all-extras && poetry run mypy'
-        additional_dependencies: ["mypy-extensions"]
         args: [--install-types, --non-interactive]
 
 -   repo: https://github.com/astral-sh/ruff-pre-commit
