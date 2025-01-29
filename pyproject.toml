@@ -1,9 +1,14 @@
+[project]
+name = "pymj"
+version = "0.1.0"
+
 [tool.poetry]
 name = "pymj"
 version = "0.1.0"
 description = ""
 authors = ["Taeho <taehogwon96@gmail.com>"]
 readme = "README.md"
+packages = [{include = "pymj"}]
 
 [tool.poetry.dependencies]
 python = "^3.12"
@@ -21,11 +26,25 @@ ruff = "^0.9.3"
 line-length = 88
 target-version = ['py312']
 include = '\.pyi?$'
+extend-exclude = '''
+/(
+  # directories
+  \.eggs
+  | \.git
+  | \.hg
+  | \.mypy_cache
+  | \.tox
+  | \.venv
+  | build
+  | dist
+)/
+'''
 
 [tool.isort]
 profile = "black"
 multi_line_output = 3
 line_length = 88
+src_paths = ["pymj"]
 
 [tool.mypy]
 python_version = "3.12"
@@ -33,7 +52,8 @@ warn_return_any = true
 warn_unused_configs = true
 disallow_untyped_defs = true
 disallow_incomplete_defs = true
-
+ignore_missing_imports = true
+exclude = ["tests/", "build/", "dist/"]
 
 [[tool.mypy.overrides]]
 module = "tests.*"
@@ -43,14 +63,19 @@ disable_error_code = ["misc"]
 [tool.ruff]
 line-length = 88
 target-version = "py312"
-lint.select = ["E", "F", "I", "N", "W", "B", "C", "D"]
-lint.ignore = ["D100", "D104", "D105", "D203", "D213"]
+fix = true
+output-format = "grouped"
+
+[tool.ruff.lint]
+select = ["E", "F", "I", "N", "W", "B", "C", "D"]
+ignore = ["D100", "D104", "D105", "D203", "D213"]
 
 [tool.ruff.lint.per-file-ignores]
 "tests/*" = ["D"]
 
-[project]
-requires-python = ">=3.12"
+[tool.ruff.lint.mccabe]
+max-complexity = 10
+
 
 [build-system]
 requires = ["poetry-core"]
