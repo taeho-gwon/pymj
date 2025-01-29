@@ -1,7 +1,7 @@
 name: Pre-commit
 
 on:
-  pull_requst:
+  pull_request:
     types: [opened, synchronize, reopened]
     branches: [main]
 
