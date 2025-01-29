@@ -35,7 +35,19 @@ class Call:
                 else PlayerRelation.PREV
             )
 
+        else:
+            self.player_relation = player_relation
+
         self._validate_init()
+
+    def __eq__(self, other: object) -> bool:
+        if not isinstance(other, Call):
+            return False
+        return (
+            self.tiles == other.tiles
+            and self.call_type == other.call_type
+            and self.player_relation == other.player_relation
+        )
 
     def _validate_init(self) -> None:
         tile_count_dict: dict[CallType, int] = {
@@ -55,11 +67,27 @@ class Call:
         if self.call_type is CallType.CHII:
             self._validate_chii()
 
-        elif not all(tile == self.tiles[0] for tile in self.tiles):
-            raise ValueError("Pon and Kan tiles must be the same tiles.")
+        else:
+            if not all(tile == self.tiles[0] for tile in self.tiles):
+                raise ValueError("Pon and Kan tiles must be the same tiles.")
+
+            if (
+                self.call_type is CallType.CONCEALED_KAN
+                and self.player_relation is not PlayerRelation.SELF
+            ):
+                raise ValueError
+
+            if (
+                self.call_type is not CallType.CONCEALED_KAN
+                and self.player_relation is PlayerRelation.SELF
+            ):
+                raise ValueError
 
     def _validate_chii(self) -> None:
         assert len(self.tiles) == 3
+
+        if self.player_relation is not PlayerRelation.PREV:
+            raise ValueError
 
         tile_type = self.tiles[0].tile_type
         if (
