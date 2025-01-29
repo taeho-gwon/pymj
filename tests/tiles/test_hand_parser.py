@@ -1,6 +1,9 @@
 import pytest
 
+from pymj.enums.call_type import CallType
+from pymj.enums.player_relation import PlayerRelation
 from pymj.enums.tile_type import TileType
+from pymj.tiles.call import Call
 from pymj.tiles.hand_parser import HandParser
 from pymj.tiles.tile import Tile
 
@@ -141,9 +144,61 @@ def test_parse_tile_group_fail(tile_group_str):
         HandParser.parse_tile_group(tile_group_str)
 
 
-def test_parse_call():
-    pass
+@pytest.mark.parametrize(
+    "call_str, expected",
+    [
+        (
+            "c<123s",
+            Call(
+                [Tile(TileType.SOU, 1), Tile(TileType.SOU, 2), Tile(TileType.SOU, 3)],
+                CallType.CHII,
+            ),
+        ),
+        (
+            "p^555p",
+            Call([Tile(TileType.PIN, 5)] * 3, CallType.PON, PlayerRelation.ACROSS),
+        ),
+        (
+            "k_9999m",
+            Call(
+                [Tile(TileType.MAN, 9)] * 4, CallType.CONCEALED_KAN, PlayerRelation.SELF
+            ),
+        ),
+        (
+            "b>1111z",
+            Call(
+                [Tile(TileType.WIND, 1)] * 4,
+                CallType.BIG_MELDED_KAN,
+                PlayerRelation.NEXT,
+            ),
+        ),
+        (
+            "s<6666z",
+            Call(
+                [Tile(TileType.DRAGON, 2)] * 4,
+                CallType.SMALL_MELDED_KAN,
+                PlayerRelation.PREV,
+            ),
+        ),
+    ],
+)
+def test_parse_call(call_str, expected):
+    assert HandParser.parse_call(call_str) == expected
 
 
-def test_parse_hand():
-    pass
+@pytest.mark.parametrize(
+    "call_str",
+    ["c>123s", "p_123p", "k<1111z", "s1111p<", "x^111z"],
+)
+def test_parse_call_fail(call_str):
+    with pytest.raises(ValueError):
+        HandParser.parse_call(call_str)
+
+
+def test_parse_hand(hand_123m456s78889p33z):
+    expected = hand_123m456s78889p33z
+    hand = HandParser.parse_hand("123m456s78889p33z")
+
+    assert hand.tiles == expected.tiles
+    assert hand.calls == expected.calls
+    assert hand.drawn_tile == expected.drawn_tile
