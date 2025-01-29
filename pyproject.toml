@@ -1,3 +1,7 @@
+[project]
+name = "pymj"
+version = "0.1.0"
+
 [tool.poetry]
 name = "pymj"
 version = "0.1.0"
