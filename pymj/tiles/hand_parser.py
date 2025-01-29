@@ -50,7 +50,7 @@ class HandParser:
 
         """
         # Extract the number and type characters
-        match = re.match(r"(\d)([mpsz])", tile_str)
+        match = re.fullmatch(r"(\d)([mpsz])", tile_str)
         if not match:
             raise ValueError
 
@@ -84,7 +84,7 @@ class HandParser:
             list[Tile]: List of parsed Tile objects
 
         """
-        match = re.match(r"(\d+)([mpsz])", group)
+        match = re.fullmatch(r"(\d+)([mpsz])", group)
         if not match:
             raise ValueError
 
