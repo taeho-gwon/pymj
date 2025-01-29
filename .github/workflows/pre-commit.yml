@@ -1,6 +1,9 @@
 name: Pre-commit
 
-on: [push, pull_request]
+on:
+  pull_requst:
+    types: [opened, synchronize, reopened]
+    branches: [main]
 
 jobs:
   pre-commit:
