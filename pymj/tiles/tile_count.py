@@ -75,9 +75,8 @@ class TileCount:
         )
 
     def __eq__(self, other: object) -> bool:
-
         if not isinstance(other, TileCount):
-            return NotImplemented
+            return False
         return self._counts == other._counts
 
     def __add__(self, other: TileCount) -> TileCount:
