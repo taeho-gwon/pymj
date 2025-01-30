@@ -111,7 +111,7 @@ class Call:
         ):
             raise ValueError("Chi tiles must be the same type.")
 
-        if tile_type is TileType.WIND or tile_type is TileType.DRAGON:
+        if tile_type not in {TileType.MAN, TileType.PIN, TileType.SOU}:
             raise ValueError(f"{tile_type.name} cannot be chii tiles.")
 
         numbers = sorted(tile.value for tile in self.tiles)
