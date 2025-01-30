@@ -10,7 +10,7 @@ class Tile:
     A tile consists of two main properties: a type (like Man, Pin, etc.) and a
     numerical value that identifies its rank within that type.
 
-    Args:
+    Attributes:
         tile_type (TileType): The category of the tile
         value (int): The numerical rank of the tile:
             - Man/Pin/Sou: 1-9
