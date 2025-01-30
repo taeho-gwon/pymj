@@ -278,7 +278,7 @@ class TileCount:
                 - Always returns a value >= the input index
 
         Raises:
-            ValueError: If the starting index is negative or greater than 34.
+            ValueError: If the starting index is negative or greater than 33.
 
         Examples:
             >>> # Initialize with counts of 1 at index 2 and 2 at index 4
@@ -289,6 +289,9 @@ class TileCount:
             4
 
         """
+        if index < 0 or index > 33:
+            raise ValueError
+
         while index < len(self._counts) and self._counts[index] == 0:
             index += 1
         return index
@@ -312,8 +315,7 @@ class TileCount:
                 - False if any non-zero count is found at an unspecified index
 
         Raises:
-            ValueError: If any of the provided indices are outside the range [0, 33].
-            TypeError: If indices argument is not a sequence type.
+            IndexError: If any of the provided indices are outside the range [0, 33].
 
         Examples:
             >>> # Initialize with counts of 1 at indices 0, 1, and 2
@@ -326,4 +328,5 @@ class TileCount:
             True
 
         """
-        return sum(self._counts[index] for index in indices) == sum(self._counts)
+        indices_set = set(indices)
+        return sum(self._counts[index] for index in indices_set) == sum(self._counts)

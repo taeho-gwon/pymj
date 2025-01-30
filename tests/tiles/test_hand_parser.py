@@ -154,7 +154,6 @@ def test_parse_tile_group_fail(tile_group_str):
         HandParser.parse_tile_group(tile_group_str)
 
 
-@pytest.mark.skip
 @pytest.mark.parametrize(
     "call_str, expected_tile_strs, expected_call_type, expected_player_relation",
     [
