@@ -14,11 +14,11 @@ class TileCount:
     represents the count of that tile type.
 
     The array indices are organized into the following tile categories:
-        Man (Characters)   : 0-8    (1-9 man)
-        Pin (Circles)      : 9-17   (1-9 pin)
-        Sou (Bamboo)      : 18-26  (1-9 sou)
-        Wind              : 27-30  (East, South, West, North)
-        Dragon            : 31-33  (White, Green, Red)
+        Man    : 0-8    (1-9 man)
+        Pin    : 9-17   (1-9 pin)
+        Sou    : 18-26  (1-9 sou)
+        Wind   : 27-30  (East, South, West, North)
+        Dragon : 31-33  (White, Green, Red)
 
     This array-based representation enables efficient operations for hand analysis,
     such as checking completeness or calculating possible tile combinations.
@@ -61,27 +61,19 @@ class TileCount:
 
     @property
     def num_tiles(self) -> int:
-        """Create a new TileCount instance from a sequence of tile indices.
+        """Calculate the total number of tiles in this TileCount instance.
 
-        A factory method that counts occurrences of tile indices and creates a
-        corresponding TileCount object. Designed for working with numeric tile
-        representations.
-
-        Args:
-            tiles (Iterable[int]): Sequence of tile indices (0-33) where:
-                0-8: Man tiles
-                9-17: Pin tiles
-                18-26: Sou tiles
-                27-30: Wind tiles
-                31-33: Dragon tiles
+        Returns the sum of all tile counts across all tile types (man, pin, sou,
+        wind, and dragon). This represents the total number of tiles being tracked
+        by this counter.
 
         Returns:
-            TileCount: A new instance with counts of provided tile indices.
+            int: The total number of tiles across all tile types.
 
         Example:
-            >>> tc = TileCount.create_from_indices([0, 0, 1])  # Two 1-man, one 2-man
-            >>> tc[0]  # Count of 1-man tiles
-            2
+            >>> tc = TileCount([2,1,0] + [0]*31)  # Two 1-man and one 2-man tiles
+            >>> tc.num_tiles
+            3
 
         """
         return sum(self._counts)
@@ -251,9 +243,6 @@ class TileCount:
 
         This method implements the iterator protocol,
         allowing iteration over all tile counts in their natural order (0 to 33).
-
-        Args:
-            None
 
         Returns:
             Iterator[int]: An iterator that yields the count value for each tile type.
