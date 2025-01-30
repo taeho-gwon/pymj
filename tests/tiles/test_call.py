@@ -48,10 +48,10 @@ from pymj.tiles.call import Call
     ],
 )
 def test_init(tile_strs, call_type, player_relation, tiles):
-    # Given : tiles for call and call_type and player_relation
+    # Given: tiles for call and call_type and player_relation
     call_tiles = [tiles[tile_str] for tile_str in tile_strs]
 
-    # Then : initialize success without error
+    # Then: initialize success without error
     with nullcontext():
         Call(call_tiles, call_type, player_relation)
 
@@ -94,10 +94,10 @@ def test_init(tile_strs, call_type, player_relation, tiles):
     ],
 )
 def test_init_fail_if_invalid_tiles(tile_strs, call_type, tiles):
-    # Given : invalid tiles for call and call_type
+    # Given: invalid tiles for call and call_type
     call_tiles = [tiles[tile_str] for tile_str in tile_strs]
 
-    # Then : raise error when initialize
+    # Then: raise error when initialize
     with pytest.raises(ValueError):
         Call(call_tiles, call_type)
 
@@ -147,9 +147,9 @@ def test_init_fail_if_invalid_tiles(tile_strs, call_type, tiles):
 def test_init_fail_if_invalid_player_relation(
     tile_strs, call_type, player_relation, tiles
 ):
-    # Given : tiles for call and call type and invalid player relation
+    # Given: tiles for call and call type and invalid player relation
     call_tiles = [tiles[tile_str] for tile_str in tile_strs]
 
-    # Then : raise error when initialize
+    # Then: raise error when initialize
     with pytest.raises(ValueError):
         Call(call_tiles, call_type, player_relation)

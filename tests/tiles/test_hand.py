@@ -2,13 +2,15 @@ from contextlib import nullcontext
 
 import pytest
 
+from pymj.tiles.hand import Hand
 
-def test_draw_tile(hand_123m456s78889p33z, tiles):
+
+def test_draw_tile(tiles):
     # Given: hand and drawn_tile
-    hand = hand_123m456s78889p33z
+    hand = Hand()
     drawn_tile = tiles["8p"]
 
-    # Then: draw success
+    # Then: draw without errors
     with nullcontext():
         hand.draw_tile(drawn_tile)
 
@@ -17,31 +19,40 @@ def test_draw_tile(hand_123m456s78889p33z, tiles):
         hand.draw_tile(drawn_tile)
 
 
-def test_discard_tile(hand_123m456s78889p33z, tiles):
+def test_discard_tile(tiles):
     # Given: hand and drawn_tile
-    hand = hand_123m456s78889p33z
+    hand = Hand()
     drawn_tile = tiles["8p"]
 
     # Then: discard fail when draw tile is None
     with pytest.raises(ValueError):
         hand.discard_tile()
 
-    # Then: discard success
+    # Then: discard without errors
     with nullcontext():
         hand.draw_tile(drawn_tile)
         assert hand.discard_tile() == drawn_tile
         assert hand.drawn_tile is None
 
 
-def test_append_drawn_tile(hand_123m456s78889p33z, tiles):
+def test_append_drawn_tile(tiles):
     # Given: hand and drawn_tile and draw it
-    hand = hand_123m456s78889p33z
-    original_tiles = hand_123m456s78889p33z.tiles[:]
+    hand = Hand()
     drawn_tile = tiles["8p"]
     hand.draw_tile(drawn_tile)
 
     # When: append_drawn_tile
     hand.append_drawn_tile()
 
-    # Then: drawn tile append success
-    assert hand.tiles == original_tiles + [drawn_tile]
+    # Then: drawn tile append successfully
+    assert hand.tiles == [drawn_tile]
+
+    # Given : new drawn_tile and draw it
+    drawn_tile2 = tiles["3z"]
+    hand.draw_tile(drawn_tile2)
+
+    # When: append_drawn_tile
+    hand.append_drawn_tile()
+
+    # Then: second drawn tile append successfully
+    assert hand.tiles == [drawn_tile, drawn_tile2]
