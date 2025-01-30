@@ -28,7 +28,7 @@ class Hand:
 
         Returns:
             Tile | None: The most recently drawn tile.
-            None if no tile has been drawn.
+                None if no tile has been drawn.
 
         """
         return self._drawn_tile
