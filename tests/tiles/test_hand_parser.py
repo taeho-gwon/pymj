@@ -4,6 +4,7 @@ from pymj.enums.call_type import CallType
 from pymj.enums.player_relation import PlayerRelation
 from pymj.enums.tile_type import TileType
 from pymj.tiles.call import Call
+from pymj.tiles.hand import Hand
 from pymj.tiles.hand_parser import HandParser
 from pymj.tiles.tile import Tile
 
@@ -27,6 +28,10 @@ from pymj.tiles.tile import Tile
     ],
 )
 def test_parse_tile(tile_str, expected):
+    # When: parse_tile
+    HandParser.parse_tile(tile_str)
+
+    # Then: result is expected
     assert HandParser.parse_tile(tile_str) == expected
 
 
@@ -42,6 +47,7 @@ def test_parse_tile(tile_str, expected):
     ],
 )
 def test_parse_tile_fail(tile_str):
+    # Then: raise error when parse invalid tile
     with pytest.raises(ValueError):
         HandParser.parse_tile(tile_str)
 
@@ -129,62 +135,74 @@ def test_parse_tile_fail(tile_str):
         ),
     ],
 )
-def test_parse_tile_group(tile_group_str, expected_strs):
-    expected_tiles = [
-        HandParser.parse_tile(expected_str) for expected_str in expected_strs
-    ]
-    assert HandParser.parse_tile_group(tile_group_str) == expected_tiles
+def test_parse_tile_group(tile_group_str, expected_strs, tiles):
+    # When: parse_tile_group
+    actual = HandParser.parse_tile_group(tile_group_str)
+    expected = [tiles[expected_str] for expected_str in expected_strs]
+
+    # Then: result is expected
+    assert actual == expected
 
 
 @pytest.mark.parametrize(
     "tile_group_str", ["1239p123z", "z1234", "1238z", "1233n", "5645mm"]
 )
 def test_parse_tile_group_fail(tile_group_str):
+    # When: parse_tile_group with invalid string
+    # Then: raise error
     with pytest.raises(ValueError):
         HandParser.parse_tile_group(tile_group_str)
 
 
 @pytest.mark.skip
 @pytest.mark.parametrize(
-    "call_str, expected",
+    "call_str, expected_tile_strs, expected_call_type, expected_player_relation",
     [
         (
             "c<123s",
-            Call(
-                [Tile(TileType.SOU, 1), Tile(TileType.SOU, 2), Tile(TileType.SOU, 3)],
-                CallType.CHII,
-            ),
+            ["1s", "2s", "3s"],
+            CallType.CHII,
+            PlayerRelation.PREV,
         ),
         (
             "p^555p",
-            Call([Tile(TileType.PIN, 5)] * 3, CallType.PON, PlayerRelation.ACROSS),
+            ["5p", "5p", "5p"],
+            CallType.PON,
+            PlayerRelation.ACROSS,
         ),
         (
             "k_9999m",
-            Call(
-                [Tile(TileType.MAN, 9)] * 4, CallType.CONCEALED_KAN, PlayerRelation.SELF
-            ),
+            ["9m", "9m", "9m", "9m"],
+            CallType.CONCEALED_KAN,
+            PlayerRelation.SELF,
         ),
         (
             "b>1111z",
-            Call(
-                [Tile(TileType.WIND, 1)] * 4,
-                CallType.BIG_MELDED_KAN,
-                PlayerRelation.NEXT,
-            ),
+            ["1z", "1z", "1z", "1z"],
+            CallType.BIG_MELDED_KAN,
+            PlayerRelation.NEXT,
         ),
         (
             "s<6666z",
-            Call(
-                [Tile(TileType.DRAGON, 2)] * 4,
-                CallType.SMALL_MELDED_KAN,
-                PlayerRelation.PREV,
-            ),
+            ["6z", "6z", "6z", "6z"],
+            CallType.SMALL_MELDED_KAN,
+            PlayerRelation.PREV,
         ),
     ],
 )
-def test_parse_call(call_str, expected):
-    assert HandParser.parse_call(call_str) == expected
+def test_parse_call(
+    call_str, expected_tile_strs, expected_call_type, expected_player_relation, tiles
+):
+    # When: parse_call
+    actual = HandParser.parse_call(call_str)
+    expected_tile = [
+        tiles[expected_tile_str] for expected_tile_str in expected_tile_strs
+    ]
+
+    # Then: result is expected
+    assert actual.tiles == expected_tile
+    assert actual.call_type == expected_call_type
+    assert actual.player_relation == expected_player_relation
 
 
 @pytest.mark.parametrize(
@@ -192,14 +210,37 @@ def test_parse_call(call_str, expected):
     ["c>123s", "p_123p", "k<1111z", "s1111p<", "x^111z"],
 )
 def test_parse_call_fail(call_str):
+    # When: parse_call with invalid string
+    # Then: raise error
     with pytest.raises(ValueError):
         HandParser.parse_call(call_str)
 
 
-def test_parse_hand(hand_123m456s78889p33z):
-    expected = hand_123m456s78889p33z
-    hand = HandParser.parse_hand("123m456s78889p33z")
+def test_parse_hand(tiles):
+    # Given: valid hand string
+    hand = Hand()
+    tile_strs = ["1m", "2m", "3m", "4m"]
+    hand.tiles = [tiles[tile_str] for tile_str in tile_strs]
 
-    assert hand.tiles == expected.tiles
-    assert hand.calls == expected.calls
-    assert hand.drawn_tile == expected.drawn_tile
+    call1 = Call(
+        [tiles["3z"], tiles["3z"], tiles["3z"]], CallType.PON, PlayerRelation.ACROSS
+    )
+    call2 = Call([tiles["8p"], tiles["7p"], tiles["9p"]], CallType.CHII)
+    hand.calls = [call1, call2]
+
+    hand_str = "1234m,p^333z,c<879p"
+
+    # When: parse_hand
+    actual = HandParser.parse_hand(hand_str)
+
+    # Then: result is expected
+    assert actual.tiles == hand.tiles
+
+    assert len(actual.calls) == len(hand.calls)
+    assert actual.calls[0].tiles == hand.calls[0].tiles
+    assert actual.calls[0].call_type == hand.calls[0].call_type
+    assert actual.calls[0].player_relation == hand.calls[0].player_relation
+
+    assert actual.calls[1].tiles == hand.calls[1].tiles
+    assert actual.calls[1].call_type == hand.calls[1].call_type
+    assert actual.calls[1].player_relation == hand.calls[1].player_relation
