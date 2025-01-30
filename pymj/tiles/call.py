@@ -11,7 +11,7 @@ class Call:
     calls (melds) during gameplay. It ensures that all game rules regarding tile
     combinations and player relations are properly enforced.
 
-    Args:
+    Attributes:
         tiles (list[Tile]): List of tiles forming the meld. The first tile must be
             the called tile from another player.
         call_type (CallType): Type of the call. See CallType enum for detailed

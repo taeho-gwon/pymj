@@ -17,7 +17,10 @@ class Hand:
     """
 
     def __init__(self) -> None:
-        """Initialize hand class."""
+        """Initialize a new Hand instance.
+
+        Creates an empty hand with no tiles, no calls, and no drawn tile.
+        """
         self.tiles: list[Tile] = []
         self.calls: list[Call] = []
         self._drawn_tile: Tile | None = None
