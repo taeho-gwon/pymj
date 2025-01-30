@@ -39,15 +39,6 @@ class HandInfo:
             call_counts if call_counts else []
         )
 
-    def __eq__(self, other: object) -> bool:
-        # TODO: 삭제 예
-        if not isinstance(other, HandInfo):
-            return False
-        return (
-            self.concealed_count == other.concealed_count
-            and self.call_counts == other.call_counts
-        )
-
     @staticmethod
     def create_from_hand(hand: Hand, is_containing_drawn_tile: bool = True) -> HandInfo:
         """Create a HandInfo instance from a Hand object.

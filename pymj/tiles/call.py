@@ -64,16 +64,6 @@ class Call:
 
         self._validate_init()
 
-    def __eq__(self, other: object) -> bool:
-        # TODO: remove this method
-        if not isinstance(other, Call):
-            return False
-        return (
-            self.tiles == other.tiles
-            and self.call_type == other.call_type
-            and self.player_relation == other.player_relation
-        )
-
     def _validate_init(self) -> None:
         tile_count_dict: dict[CallType, int] = {
             CallType.CHII: 3,
