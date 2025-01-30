@@ -40,15 +40,6 @@ class AgariHandInfo:
         self.is_tsumo = is_tsumo
         self.hand_info = hand_info if hand_info else HandInfo()
 
-    def __eq__(self, other: object) -> bool:
-        if not isinstance(other, AgariHandInfo):
-            return False
-        return (
-            self.agari_tile == other.agari_tile
-            and self.is_tsumo == other.is_tsumo
-            and self.hand_info == other.hand_info
-        )
-
     @staticmethod
     def create_from_hand(hand: Hand, agari_tile: Tile | None = None) -> AgariHandInfo:
         """Create an AgariHandInfo instance from a given hand.

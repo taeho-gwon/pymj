@@ -1,6 +1,6 @@
 from __future__ import annotations
 
-from typing import Iterable, Iterator, Sequence, SupportsIndex, overload
+from typing import Iterable, Iterator, Sequence, SupportsIndex
 
 from pymj.tiles.tile import Tile
 from pymj.tiles.tile_mapping import TileMapping
@@ -14,11 +14,11 @@ class TileCount:
     represents the count of that tile type.
 
     The array indices are organized into the following tile categories:
-        Man (Characters)   : 0-8    (1-9 man)
-        Pin (Circles)      : 9-17   (1-9 pin)
-        Sou (Bamboo)      : 18-26  (1-9 sou)
-        Wind              : 27-30  (East, South, West, North)
-        Dragon            : 31-33  (White, Green, Red)
+        Man    : 0-8    (1-9 man)
+        Pin    : 9-17   (1-9 pin)
+        Sou    : 18-26  (1-9 sou)
+        Wind   : 27-30  (East, South, West, North)
+        Dragon : 31-33  (White, Green, Red)
 
     This array-based representation enables efficient operations for hand analysis,
     such as checking completeness or calculating possible tile combinations.
@@ -55,33 +55,25 @@ class TileCount:
         if counts is None:
             self._counts = [0] * 34
         else:
-            if len(self._counts) != 34:
+            if len(counts) != 34:
                 raise ValueError
             self._counts = counts[:]
 
     @property
     def num_tiles(self) -> int:
-        """Create a new TileCount instance from a sequence of tile indices.
+        """Calculate the total number of tiles in this TileCount instance.
 
-        A factory method that counts occurrences of tile indices and creates a
-        corresponding TileCount object. Designed for working with numeric tile
-        representations.
-
-        Args:
-            tiles (Iterable[int]): Sequence of tile indices (0-33) where:
-                0-8: Man tiles
-                9-17: Pin tiles
-                18-26: Sou tiles
-                27-30: Wind tiles
-                31-33: Dragon tiles
+        Returns the sum of all tile counts across all tile types (man, pin, sou,
+        wind, and dragon). This represents the total number of tiles being tracked
+        by this counter.
 
         Returns:
-            TileCount: A new instance with counts of provided tile indices.
+            int: The total number of tiles across all tile types.
 
         Example:
-            >>> tc = TileCount.create_from_indices([0, 0, 1])  # Two 1-man, one 2-man
-            >>> tc[0]  # Count of 1-man tiles
-            2
+            >>> tc = TileCount([2,1,0] + [0]*31)  # Two 1-man and one 2-man tiles
+            >>> tc.num_tiles
+            3
 
         """
         return sum(self._counts)
@@ -196,34 +188,19 @@ class TileCount:
             [count1 + count2 for count1, count2 in zip(self, other, strict=False)]
         )
 
-    @overload
-    def __getitem__(self, key: SupportsIndex) -> int: ...
-
-    @overload
-    def __getitem__(self, key: slice) -> list[int]: ...
-
-    def __getitem__(self, key: SupportsIndex | slice) -> int | list[int]:
-        """Access tile counts using index or slice notation.
-
-        Implements Python's standard indexing interface to provide convenient access to
-        tile counts. Supports both single-index lookups and slice operations for
-        accessing multiple counts at once.
+    def __getitem__(self, key: SupportsIndex) -> int:
+        """Access tile counts using index.
 
         Args:
-           key (SupportsIndex | slice): The index or slice to access the counts:
-               - For single index (0-33): Returns count of specific tile type
-               - For slice: Returns list of counts within specified range
+           key (SupportsIndex): The index to access the counts:
 
         Returns:
-           int | list[int]: Either a single tile count (when using index) or a list of
-               counts (when using slice).
+           int: A single tile count
 
         Example:
            >>> tc = TileCount([1,2,3] + [0]*31)  # First three tiles have counts 1,2,3
            >>> tc[0]  # Get count of first tile type (1-man)
            1
-           >>> tc[0:3]  # Get counts of first three tile types
-           [1, 2, 3]
 
         """
         return self._counts[key]
@@ -251,9 +228,6 @@ class TileCount:
 
         This method implements the iterator protocol,
         allowing iteration over all tile counts in their natural order (0 to 33).
-
-        Args:
-            None
 
         Returns:
             Iterator[int]: An iterator that yields the count value for each tile type.
@@ -289,7 +263,7 @@ class TileCount:
                 - Always returns a value >= the input index
 
         Raises:
-            ValueError: If the starting index is negative or greater than 34.
+            ValueError: If the starting index is negative or greater than 33.
 
         Examples:
             >>> # Initialize with counts of 1 at index 2 and 2 at index 4
@@ -300,6 +274,9 @@ class TileCount:
             4
 
         """
+        if index < 0 or index > 33:
+            raise ValueError
+
         while index < len(self._counts) and self._counts[index] == 0:
             index += 1
         return index
@@ -323,8 +300,7 @@ class TileCount:
                 - False if any non-zero count is found at an unspecified index
 
         Raises:
-            ValueError: If any of the provided indices are outside the range [0, 33].
-            TypeError: If indices argument is not a sequence type.
+            IndexError: If any of the provided indices are outside the range [0, 33].
 
         Examples:
             >>> # Initialize with counts of 1 at indices 0, 1, and 2
@@ -337,4 +313,5 @@ class TileCount:
             True
 
         """
-        return sum(self._counts[index] for index in indices) == sum(self._counts)
+        indices_set = set(indices)
+        return sum(self._counts[index] for index in indices_set) == sum(self._counts)

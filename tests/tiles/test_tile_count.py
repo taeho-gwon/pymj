@@ -1,105 +1,132 @@
 import pytest
 
 from pymj.tiles.tile_count import TileCount
-from pymj.tiles.tile_mapping import TileMapping
 
 
-@pytest.fixture
-def tile_count_123m456s78889p33z(hand_123m456s78889p33z):
-    return TileCount.create_from_tiles(hand_123m456s78889p33z.tiles)
+def test_num_tiles():
+    # Given: empty tile count
+    empty_count = TileCount()
+
+    # Then: count is 0
+    assert empty_count.num_tiles == 0
+
+    # Given: "112m" is given
+    counts_112m = [0] * 34
+    counts_112m[0] = 2
+    counts_112m[1] = 1
+    tile_count_112m = TileCount(counts_112m)
+
+    # Then: count is 3
+    assert tile_count_112m.num_tiles == 3
+
+    # Given: all 34 tile is given
+    all_tiles = [1] * 34
+    all_tile_count = TileCount(all_tiles)
+
+    # Then: count is 34
+    assert all_tile_count.num_tiles == 34
 
 
-def test_create_from_tiles(hand_123m456s78889p33z):
-    # Given : hand
-    hand = hand_123m456s78889p33z
+def test_create_from_indices():
+    # When: create_from_indices with empty indices list
+    empty_count = TileCount.create_from_indices([])
 
-    # When : call create_from_tiles
-    tile_count = TileCount.create_from_tiles(hand.tiles)
+    # Then: all elements are 0
+    assert all(empty_count[i] == 0 for i in range(34))
+    assert empty_count.num_tiles == 0
 
-    # Then : tile_count create success
-    assert tile_count[:] == [
-        1,
-        1,
-        1,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        1,
-        3,
-        1,
-        0,
-        0,
-        0,
-        1,
-        1,
-        1,
-        0,
-        0,
-        0,
-        0,
-        0,
-        2,
-        0,
-        0,
-        0,
-        0,
-    ]
+    # Given: indices for "112m"
+    indices_112m = [0, 0, 1]
+
+    # When: create_from_indices
+    tile_count_112m = TileCount.create_from_indices(indices_112m)
+
+    # Then: two 1m, and one 2m
+    assert tile_count_112m[0] == 2
+    assert tile_count_112m[1] == 1
+    assert tile_count_112m[2] == 0
+
+    # Given: indices for all tiles
+    all_indices = list(range(34))
+
+    # When: create_from_indices
+    all_tile_count = TileCount.create_from_indices(all_indices)
+
+    # Then: all elements are 1
+    assert all(all_tile_count[i] == 1 for i in range(34))
 
 
-def test_create_from_indices(tile_count_123m456s78889p33z, hand_123m456s78889p33z):
-    # Given : hand and indices
-    hand = hand_123m456s78889p33z
-    indices = [TileMapping.tile_to_index(tile) for tile in hand.tiles]
+def test_create_from_tiles(tiles):
+    # When: create_from_indices with empty indices list
+    empty_count = TileCount.create_from_tiles([])
 
-    # When : call create_from_tiles
-    tile_count = TileCount.create_from_indices(indices)
+    # Then: all elements are 0
+    assert all(empty_count[i] == 0 for i in range(34))
+    assert empty_count.num_tiles == 0
 
-    # Then : tile_count is same
-    assert tile_count_123m456s78889p33z == tile_count
+    # Given: indices for "112m"
+    tiles_112m = [tiles["1m"], tiles["1m"], tiles["2m"]]
 
+    # When: create_from_indices
+    tile_count_112m = TileCount.create_from_tiles(tiles_112m)
 
-def test_num_tiles(tile_count_123m456s78889p33z):
-    # Given: tile_count
-    tile_count = tile_count_123m456s78889p33z
+    # Then: two 1m, and one 2m
+    assert tile_count_112m[0] == 2
+    assert tile_count_112m[1] == 1
+    assert tile_count_112m[2] == 0
 
-    # Then : num_tiles work success
-    assert tile_count.num_tiles == 13
+    # Given: indices for all tiles
+    all_tiles = tiles.values()
 
-    # When : tile changed
-    tile_count[0] += 1
+    # When: create_from_indices
+    all_tile_count = TileCount.create_from_tiles(all_tiles)
 
-    # Then: num_tiles increase
-    assert tile_count.num_tiles == 14
-
-
-def test_find_earliest_nonzero_index(tile_count_123m456s78889p33z):
-    # Given : tile_count
-    tile_count = tile_count_123m456s78889p33z
-
-    # Then : find_earliest_nonzero_index works success
-    assert tile_count.find_earliest_nonzero_index() == 0  # st -> 1m
-    assert tile_count.find_earliest_nonzero_index(3) == 15  # 4m -> 7p
-    assert tile_count.find_earliest_nonzero_index(19) == 21  # 2s -> 4s
-    assert tile_count.find_earliest_nonzero_index(24) == 29  # 7s -> 3z
-    assert tile_count.find_earliest_nonzero_index(32) == 34  # 6z -> end
+    # Then: all elements are 1
+    assert all(all_tile_count[i] == 1 for i in range(34))
 
 
-def test_is_containing_only(tile_count_123m456s78889p33z):
-    # Given : tile_count
-    tile_count = tile_count_123m456s78889p33z
-    indices = [index for index in range(34) if tile_count[index] > 0]
+def test_find_earliest_nonzero_index():
+    # Given: tile_counts for "14m"
+    counts = [1, 0, 0, 1] + [0] * 30
+    tile_count = TileCount(counts)
 
-    # Then : is_containing_only works success
-    assert tile_count.is_containing_only(indices)
-    assert not tile_count.is_containing_only(indices[:-1])
-    assert not tile_count.is_containing_only(indices[1:])
-    assert tile_count.is_containing_only(indices + [6, 7])
+    # Then: earliest nonzero index is 0
+    assert tile_count.find_earliest_nonzero_index() == 0
+
+    # Then: earliest nonzero index greater than 1 is 3
+    assert tile_count.find_earliest_nonzero_index(1) == 3
+
+    # Then: earliest nonzero index greater than 10 is 34
+    assert tile_count.find_earliest_nonzero_index(10) == 34
+
+    # Then: raise error for invalid index
+    with pytest.raises(ValueError):
+        tile_count.find_earliest_nonzero_index(-1)
+    with pytest.raises(ValueError):
+        tile_count.find_earliest_nonzero_index(35)
+
+
+def test_is_containing_only():
+    # Given: empty tile count
+    empty_count = TileCount()
+
+    # Then: is_containing_only always return True
+    assert empty_count.is_containing_only([])
+    assert empty_count.is_containing_only([0])
+    assert empty_count.is_containing_only([3, 6, 19, 22])
+
+    # Given: tile count for "112m"
+    counts = [0] * 34
+    counts[0] = 2
+    counts[1] = 1
+    tile_count = TileCount(counts)
+
+    # Then: is_containing_only for "12m"
+    assert not tile_count.is_containing_only([0])
+    assert tile_count.is_containing_only([0, 1])
+    assert tile_count.is_containing_only([0, 1, 2, 3])
+    assert tile_count.is_containing_only([0, 0, 1, 1])
+
+    # Then: raise error for invalid index
+    with pytest.raises(IndexError):
+        tile_count.is_containing_only([0, 1, 34])

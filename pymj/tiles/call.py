@@ -11,7 +11,7 @@ class Call:
     calls (melds) during gameplay. It ensures that all game rules regarding tile
     combinations and player relations are properly enforced.
 
-    Args:
+    Attributes:
         tiles (list[Tile]): List of tiles forming the meld. The first tile must be
             the called tile from another player.
         call_type (CallType): Type of the call. See CallType enum for detailed
@@ -64,16 +64,6 @@ class Call:
 
         self._validate_init()
 
-    def __eq__(self, other: object) -> bool:
-        # TODO: remove this method
-        if not isinstance(other, Call):
-            return False
-        return (
-            self.tiles == other.tiles
-            and self.call_type == other.call_type
-            and self.player_relation == other.player_relation
-        )
-
     def _validate_init(self) -> None:
         tile_count_dict: dict[CallType, int] = {
             CallType.CHII: 3,
@@ -121,7 +111,7 @@ class Call:
         ):
             raise ValueError("Chi tiles must be the same type.")
 
-        if tile_type is TileType.WIND or tile_type is TileType.DRAGON:
+        if tile_type not in {TileType.MAN, TileType.PIN, TileType.SOU}:
             raise ValueError(f"{tile_type.name} cannot be chii tiles.")
 
         numbers = sorted(tile.value for tile in self.tiles)

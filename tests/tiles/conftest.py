@@ -1,7 +1,6 @@
 import pytest
 
 from pymj.enums.tile_type import TileType
-from pymj.tiles.hand import Hand
 from pymj.tiles.tile import Tile
 
 
@@ -16,15 +15,3 @@ def tiles():
     }
 
     return mans | pins | sous | winds | dragons
-
-
-@pytest.fixture
-def hand_123m456s78889p33z(tiles):
-    hand = Hand()
-    tile_str = "1m2m3m4s5s6s7p8p8p8p9p3z3z"
-    hand.tiles = [
-        tiles[tile_num + tile_type]
-        for tile_num, tile_type in zip(tile_str[::2], tile_str[1::2], strict=False)
-    ]
-
-    return hand
