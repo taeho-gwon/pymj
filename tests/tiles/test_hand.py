@@ -47,7 +47,7 @@ def test_append_drawn_tile(tiles):
     # Then: drawn tile append successfully
     assert hand.tiles == [drawn_tile]
 
-    # Given : new drawn_tile and draw it
+    # Given: new drawn_tile and draw it
     drawn_tile2 = tiles["3z"]
     hand.draw_tile(drawn_tile2)
 

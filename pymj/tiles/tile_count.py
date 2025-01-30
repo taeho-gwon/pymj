@@ -55,7 +55,7 @@ class TileCount:
         if counts is None:
             self._counts = [0] * 34
         else:
-            if len(self._counts) != 34:
+            if len(counts) != 34:
                 raise ValueError
             self._counts = counts[:]
 
