@@ -12,7 +12,7 @@ def test_create_from_hand(tiles):
     hand.draw_tile(agari_tile)
 
     # When : create_from_hand
-    agari_hand_info = AgariHandInfo.create_from_hand(hand)
+    agari_hand_info = AgariHandInfo.create_from_hand(hand, is_tsumo=True)
 
     # Then : attributes are expected
     assert agari_hand_info.agari_tile == agari_tile
@@ -37,7 +37,7 @@ def test_create_from_hand_fail(tiles):
 def test_total_count(tiles):
     # Given: agari hand info
     tile_1m = tiles["1m"]
-    agari_hand_info = AgariHandInfo(tile_1m)
+    agari_hand_info = AgariHandInfo(agari_tile=tile_1m)
 
     # When: total_count
     total_count = agari_hand_info.total_count
