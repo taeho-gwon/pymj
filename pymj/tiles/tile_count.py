@@ -1,6 +1,6 @@
 from __future__ import annotations
 
-from typing import Iterable, Iterator, Sequence, SupportsIndex, overload
+from typing import Iterable, Iterator, Sequence, SupportsIndex
 
 from pymj.tiles.tile import Tile
 from pymj.tiles.tile_mapping import TileMapping
@@ -188,34 +188,19 @@ class TileCount:
             [count1 + count2 for count1, count2 in zip(self, other, strict=False)]
         )
 
-    @overload
-    def __getitem__(self, key: SupportsIndex) -> int: ...
-
-    @overload
-    def __getitem__(self, key: slice) -> list[int]: ...
-
-    def __getitem__(self, key: SupportsIndex | slice) -> int | list[int]:
-        """Access tile counts using index or slice notation.
-
-        Implements Python's standard indexing interface to provide convenient access to
-        tile counts. Supports both single-index lookups and slice operations for
-        accessing multiple counts at once.
+    def __getitem__(self, key: SupportsIndex) -> int:
+        """Access tile counts using index.
 
         Args:
-           key (SupportsIndex | slice): The index or slice to access the counts:
-               - For single index (0-33): Returns count of specific tile type
-               - For slice: Returns list of counts within specified range
+           key (SupportsIndex): The index to access the counts:
 
         Returns:
-           int | list[int]: Either a single tile count (when using index) or a list of
-               counts (when using slice).
+           int: A single tile count
 
         Example:
            >>> tc = TileCount([1,2,3] + [0]*31)  # First three tiles have counts 1,2,3
            >>> tc[0]  # Get count of first tile type (1-man)
            1
-           >>> tc[0:3]  # Get counts of first three tile types
-           [1, 2, 3]
 
         """
         return self._counts[key]
