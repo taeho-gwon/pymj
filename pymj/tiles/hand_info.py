@@ -6,14 +6,32 @@ from pymj.tiles.tile_count import TileCount
 
 
 class HandInfo:
-    """Represent hand info containing tile count of concealed tiles and calls."""
+    """A class representing detailed information about a Mahjong hand's composition.
+
+    This class maintains counts of tiles in both concealed part of the hand and calls.
+
+    Attributes:
+        concealed_count (TileCount): Count of tiles in the concealed part of the hand.
+        call_counts (list[tuple[CallType, TileCount]]):
+            List of call type and corresponding tile counts for each call.
+
+    """
 
     def __init__(
         self,
         concealed_count: TileCount | None = None,
         call_counts: list[tuple[CallType, TileCount]] | None = None,
     ):
-        """Initialize hand info."""
+        """Initialize a new HandInfo instance.
+
+        Args:
+            concealed_count (TileCount | None): Initial count of concealed tiles.
+                Defaults to empty TileCount if None.
+            call_counts (list[tuple[CallType, TileCount]] | None):
+                Initial list of call types and their tile counts.
+                Defaults to empty list if None.
+
+        """
         self.concealed_count: TileCount = (
             concealed_count if concealed_count else TileCount()
         )
@@ -22,6 +40,7 @@ class HandInfo:
         )
 
     def __eq__(self, other: object) -> bool:
+        # TODO: 삭제 예
         if not isinstance(other, HandInfo):
             return False
         return (
@@ -31,16 +50,20 @@ class HandInfo:
 
     @staticmethod
     def create_from_hand(hand: Hand, is_containing_drawn_tile: bool = True) -> HandInfo:
-        """Create HandInfo class from hand.
+        """Create a HandInfo instance from a Hand object.
+
+        Constructs a new HandInfo by counting tiles in the given hand, optionally
+        including the most recently drawn tile. Also processes all calls (revealed
+        combinations) in the hand.
 
         Args:
-        ----
-            hand: hand to create hand info
-            is_containing_drawn_tile: True if hand info wants containing drawn_tile
+            hand (Hand): The hand to create information from.
+            is_containing_drawn_tile (bool): Whether to include the drawn tile in the
+                concealed count. Defaults to True.
 
         Returns:
-        -------
-            HandInfo class from hand
+            HandInfo: A new HandInfo instance representing the tile counts of the
+                given hand.
 
         """
         tiles = hand.tiles[:]
@@ -57,11 +80,14 @@ class HandInfo:
 
     @property
     def total_count(self) -> TileCount:
-        """Calculate sum of all components in agari hand info.
+        """Calculate the total count of all tiles in the hand.
 
-        Returns
-        -------
-            TileCount: count of all tiles
+        Combines the counts of concealed tiles and all tiles in calls to produce
+        a total count of tiles in the hand.
+
+        Returns:
+            TileCount: The combined count of all tiles in both concealed hand
+                and revealed combinations.
 
         """
         return sum(
