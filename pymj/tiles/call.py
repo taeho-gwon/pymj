@@ -5,7 +5,30 @@ from pymj.tiles.tile import Tile
 
 
 class Call:
-    """Represents a call object for mahjong hand."""
+    """A class representing a melded combination of tiles.
+
+    This class manages the validation and storage of tile combinations formed through
+    calls (melds) during gameplay. It ensures that all game rules regarding tile
+    combinations and player relations are properly enforced.
+
+    Attributes
+    ----------
+    tiles : list[Tile]
+        List of tiles forming the meld.
+        The first tile must be the called tile from another player.
+    call_type : CallType
+        Type of the call (see CallType enum for detailed descriptions)
+    player_relation : PlayerRelation
+        Relationship to the player whose tile was called
+        (SELF for concealed kan, PREV for chii, can vary for other calls)
+
+    Raises
+    ------
+    ValueError
+        If the tiles don't match the requirements for the specified call type,
+        or if the player relation is invalid for the call type.
+
+    """
 
     def __init__(
         self,
@@ -13,16 +36,22 @@ class Call:
         call_type: CallType,
         player_relation: PlayerRelation | None = None,
     ) -> None:
-        """Initialize for call class.
+        """Initialize a new Call instance representing a tile combination.
 
-        Args:
-        ----
-            tiles (list[Tile]): tile list for calls.
-                If Chii type, first tile must be other's tile.
-            call_type (CallType): type of call (chii, pon, kan...)
-            player_relation (PlayerRelation | None):
-                relation of player who discard called tile.
-                If None, SELF for concealed kan, else PREV
+        Parameters
+        ----------
+        tiles : list[Tile]
+            The tiles forming the combination. First tile must be the called tile.
+        call_type : CallType
+            The type of combination being formed.
+        player_relation : PlayerRelation | None, optional
+            Relation to the player who discarded the called tile.
+            If None, defaults to SELF for concealed kan and PREV for others.
+
+        Raises
+        ------
+        ValueError
+            If tiles don't form a valid combination or player relation is invalid.
 
         """
         self.tiles = tiles
@@ -41,6 +70,7 @@ class Call:
         self._validate_init()
 
     def __eq__(self, other: object) -> bool:
+        # TODO: remove this method
         if not isinstance(other, Call):
             return False
         return (
