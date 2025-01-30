@@ -5,38 +5,28 @@ from pymj.enums.tile_type import TileType
 
 @dataclass(frozen=True)
 class Tile:
-    """A representation of a mahjong tile with its type and value.
+    """Represents a single Mahjong tile with its type and numerical value.
 
-    Each tile has a specific type and a numerical
-    value representing its rank or number within that type.
+    A tile consists of two main properties: a type (like Man, Pin, etc.) and a
+    numerical value that identifies its rank within that type.
 
-    Attributes:
-        tile_type (TileType): The type or suit of the Mahjong tile
-            (e.g., man, pin, sou, wind, dragon, etc.(like flower).
-        value (int): The numerical value of the tile within its type:
-            - Number tiles (MAN/PIN/SOU): Values from 1 to 9
-            - Wind tiles: East(1), South(2), West(3), North(4)
-            - Dragon tiles: White(1), Green(2), Red(3)
-            - ETC types: special tiles
+    Args:
+        tile_type (TileType): The category of the tile
+        value (int): The numerical rank of the tile:
+            - Man/Pin/Sou: 1-9
+            - Wind: East(1), South(2), West(3), North(4)
+            - Dragon: White(1), Green(2), Red(3)
+            - Etc: any value for special tiles
+
     Raises:
-        ValueError: If the provided value is outside the valid range for the
-                   specified tile type. For example:
-                   - Values > 9 for number tiles (MAN/PIN/SOU)
-                   - Values > 4 for wind tiles
-                   - Values > 3 for dragon tiles
+        ValueError: If value is invalid for the given tile_type:
+            - Man/Pin/Sou: must be 1-9
+            - Wind: must be 1-4
+            - Dragon: must be 1-3
 
     Examples:
-        Creating a Five of Characters (5 Man):
-        >>> five_man = Tile(tile_type=TileType.MAN, value=5)
-
-        Creating an East Wind tile:
-        >>> east_wind = Tile(tile_type=TileType.WIND, value=1)
-
-        Creating a White Dragon tile:
-        >>> white_dragon = Tile(tile_type=TileType.DRAGON, value=1)
-
-        This will raise a ValueError (invalid value for PIN type):
-        >>> invalid_tile = Tile(tile_type=TileType.PIN, value=10)
+        >>> five_man = Tile(tile_type=TileType.MAN, value=5)  # 5 of Characters
+        >>> east_wind = Tile(tile_type=TileType.WIND, value=1)  # East Wind
 
     """
 
