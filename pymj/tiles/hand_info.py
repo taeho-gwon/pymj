@@ -7,7 +7,7 @@ from pymj.tiles.tile_count import TileCount
 from pymj.tiles.tile_mapping import TileMapping
 
 
-class AgariHandInfo:
+class HandInfo:
     """Represents the complete hand information at the point of winning.
 
     This class stores information about concealed tiles, called tiles (melds),
@@ -28,7 +28,7 @@ class AgariHandInfo:
         agari_tile: Tile | None = None,
         is_tsumo: bool = False,
     ):
-        """Initialize an AgariHandInfo instance.
+        """Initialize an HandInfo instance.
 
         Args:
             concealed_count (TileCount | None, optional):
@@ -51,16 +51,16 @@ class AgariHandInfo:
     @staticmethod
     def create_from_hand(
         hand: Hand, agari_tile: Tile | None = None, is_tsumo: bool = False
-    ) -> AgariHandInfo:
-        """Create an AgariHandInfo instance from a Hand object.
+    ) -> HandInfo:
+        """Create an HandInfo instance from a Hand object.
 
         Args:
-            hand (Hand): The hand to create AgariHandInfo from.
+            hand (Hand): The hand to create HandInfo from.
             agari_tile (Tile | None): The winning tile if different from drawn tile.
             is_tsumo (bool): Whether the win was achieved by self-draw.
 
         Returns:
-            AgariHandInfo: A new instance containing the hand information.
+            HandInfo: A new instance containing the hand information.
 
         Raises:
             ValueError: If both drawn_tile and agari_tile are given or both are absent.
@@ -78,7 +78,7 @@ class AgariHandInfo:
             for call in hand.calls
         ]
 
-        return AgariHandInfo(
+        return HandInfo(
             concealed_count=concealed_counts,
             call_counts=call_counts,
             agari_tile=agari_tile or hand.drawn_tile,
