@@ -48,3 +48,47 @@ class Tile:
 
     def __repr__(self) -> str:
         return f"{self.tile_type.name} {self.value}"
+
+
+class Tiles:
+    """Define tile categories and special tile combinations used in gameplay.
+
+    Contains class variables representing different tile categories like numbered tiles,
+    honor tiles, and special combinations such as terminals and straight patterns.
+
+    Attributes:
+        MANS: Character tile indices (0-8).
+        PINS: Circle tile indices (9-17).
+        SOUS: Bamboo tile indices (18-26).
+        WINDS: Wind tile indices (27-30).
+        DRAGONS: Dragon tile indices (31-33).
+        NUMBERS: All number tiles combined (MANS + PINS + SOUS).
+        HONORS: All honor tiles combined (WINDS + DRAGONS).
+        ALL : Standard set of all tiles used in gameplay.
+        TERMINALS: Terminal number tile indices (1 and 9).
+        TERMINALS_AND_HONORS: Terminal and honor tiles combined.
+        STRAIGHT_STARTS: Indices that can start a complete straight (1-7).
+        PARTIAL_STRAIGHT_STARTS: Indices that can start partial straights (1-8).
+        SIMPLES: Simple number tile indices (2-8).
+        GREENS: Indices for tiles used in all-green combinations.
+
+    """
+
+    MANS = list(range(9))
+    PINS = list(range(9, 18))
+    SOUS = list(range(18, 27))
+    WINDS = [27, 28, 29, 30]
+    DRAGONS = [31, 32, 33]
+
+    NUMBERS = MANS + PINS + SOUS
+    HONORS = WINDS + DRAGONS
+    ALL = NUMBERS + HONORS
+
+    TERMINALS = [MANS[0], MANS[8], PINS[0], PINS[8], SOUS[0], SOUS[8]]
+    TERMINALS_AND_HONORS = TERMINALS + HONORS
+
+    STRAIGHT_STARTS = MANS[0:7] + PINS[0:7] + SOUS[0:7]
+    PARTIAL_STRAIGHT_STARTS = MANS[0:8] + PINS[0:8] + SOUS[0:8]
+
+    SIMPLES = MANS[1:8] + PINS[1:8] + SOUS[1:8]
+    GREENS = [SOUS[1], SOUS[2], SOUS[3], SOUS[5], SOUS[7], DRAGONS[1]]
