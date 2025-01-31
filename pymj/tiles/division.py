@@ -14,9 +14,9 @@ class DivisionPart:
     It tracks the type, count, and concealment status.
 
     Attributes:
-        type: The type of the division part (head, triple, sequence, etc.)
-        tile_count: Counter tracking the number of each tile in this part
-        is_concealed: Whether this combination is concealed from other players
+        type (DivisionPartType): The type of the division part (head, triple, etc.)
+        tile_count (TileCount): Counter tracking the number of each tile in this part
+        is_concealed (bool): Whether this combination is concealed from other players
 
     """
 
@@ -29,9 +29,10 @@ class DivisionPart:
         """Initialize a new division part.
 
         Args:
-            division_part_type: The type of division part (HEAD, TRIPLE, SEQUENCE, etc.)
-            tile_count: Counter tracking the number of each tile in this part
-            is_concealed: Whether this combination is hidden from other players
+            division_part_type (DivisionPartType):
+                The type of division part (HEAD, TRIPLE, SEQUENCE, etc.)
+            tile_count (TileCount): Counter tracking the number of each tile
+            is_concealed (bool): Whether this combination is hidden from other players
 
         """
         self.type = division_part_type
