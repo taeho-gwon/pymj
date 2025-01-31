@@ -77,7 +77,7 @@ class DivisionPart:
         )
 
     @staticmethod
-    def create_straight(
+    def create_sequence(
         first_tile_index: int, state: DivisionPartState
     ) -> DivisionPart:
         """Create a sequence of three consecutive numbered tiles.
@@ -93,7 +93,7 @@ class DivisionPart:
             ValueError: If first_tile_index is not a valid sequence starting point
 
         """
-        if first_tile_index not in Tiles.STRAIGHT_STARTS:
+        if first_tile_index not in Tiles.SEQUENCE_STARTS:
             raise ValueError
         return DivisionPart(
             division_part_type=DivisionPartType.SEQUENCE,
