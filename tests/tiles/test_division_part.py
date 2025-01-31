@@ -52,6 +52,16 @@ def test_create_sequence():
     assert sequence_part.state == state
 
 
+def test_create_sequence_fail():
+    # Given: tile cannaot make sequence and state
+    invalid_sequence_index = 8  # 9m
+    state = DivisionPartState.RON
+
+    # Then: raise error when create_sequence
+    with pytest.raises(ValueError):
+        DivisionPart.create_sequence(invalid_sequence_index, state)
+
+
 def test_create_thirteen_orphans():
     # Given: pair tile of thirteen orphan and state
     pair_index = 0
