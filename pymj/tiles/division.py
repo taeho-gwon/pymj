@@ -44,11 +44,11 @@ class DivisionPart:
         """Create a pair of identical tiles for use as a hand's head.
 
         Args:
-            tile_index: Index of the tile to form the pair
-            is_concealed: Whether this pair is hidden from other players
+            tile_index (int): Index of the tile to form the pair
+            is_concealed (bool): Whether this pair is hidden from other players
 
         Returns:
-            A DivisionPart instance representing the pair
+            DivisionPart: A DivisionPart instance representing the pair
 
         """
         return DivisionPart(
@@ -62,11 +62,11 @@ class DivisionPart:
         """Create a triple of identical tiles.
 
         Args:
-            tile_index: Index of the tile to form the triple
-            is_concealed: Whether this triple is hidden from other players
+            tile_index (int): Index of the tile to form the triple
+            is_concealed (bool): Whether this triple is hidden from other players
 
         Returns:
-            A DivisionPart instance representing the triple
+            DivisionPart: A DivisionPart instance representing the triple
 
         """
         return DivisionPart(
@@ -80,11 +80,11 @@ class DivisionPart:
         """Create a sequence of three consecutive numbered tiles.
 
         Args:
-            first_tile_index: Index of the first tile in the sequence
-            is_concealed: Whether this sequence is hidden from other players
+            first_tile_index (int): Index of the first tile in the sequence
+            is_concealed (bool): Whether this sequence is hidden from other players
 
         Returns:
-            A DivisionPart instance representing the sequence
+            DivisionPart: A DivisionPart instance representing the sequence
 
         Raises:
             ValueError: If first_tile_index is not a valid sequence starting point
@@ -107,11 +107,11 @@ class DivisionPart:
         """Create a special combination for the Thirteen Orphans pattern.
 
         Args:
-            head_tile_index: Index of the tile that forms the pair
-            is_concealed: Whether this combination is hidden from other players
+            head_tile_index (int): Index of the tile that forms the pair
+            is_concealed (bool): Whether this combination is hidden from other players
 
         Returns:
-            A DivisionPart instance representing the Thirteen Orphans pattern
+            DivisionPart: A DivisionPart instance representing the Thirteen Orphans
 
         """
         return DivisionPart(
@@ -127,11 +127,11 @@ class DivisionPart:
         """Create a tile combination based on the type of call made.
 
         Args:
-            call_type: Type of the call (Chii, Pon, or Kan)
-            call_count: Counter tracking the tiles involved in the call
+            call_type (CallType): Type of the call (Chii, Pon, or Kan)
+            call_count (TileCount): Counter tracking the tiles involved in the call
 
         Returns:
-            A DivisionPart instance representing the called combination
+            DivisionPart: A DivisionPart instance representing the called combination
 
         """
         match call_type:
