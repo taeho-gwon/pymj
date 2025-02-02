@@ -15,7 +15,7 @@ class SevenPairChecker(HandChecker):
         """Create list of division containing seven pairs from given hand.
 
         Args:
-            hand_info (HandInfo): Hand info wants to calculate division.
+            hand_info (HandInfo): Contains info about hand.
 
         Returns:
             list[Division]: List containing single division of seven pairs.
@@ -44,7 +44,7 @@ class SevenPairChecker(HandChecker):
         """Calculate shanten number for seven pairs pattern.
 
         Args:
-            hand_info (HandInfo): Hand info wants to calculate shanten.
+            hand_info (HandInfo): Contains info about hand.
 
         Returns:
             int: Number of tile arrangements needed, where:
