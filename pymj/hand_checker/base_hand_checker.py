@@ -4,7 +4,7 @@ from pymj.tiles.division import Division
 from pymj.tiles.hand_info import HandInfo
 
 
-class HandChecker(ABC):
+class BaseHandChecker(ABC):
     """Define abstract interface for checking hand completion and tile combinations.
 
     This abstract class provides methods to analyze tile combinations

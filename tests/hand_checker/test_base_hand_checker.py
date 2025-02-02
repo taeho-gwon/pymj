@@ -1,18 +1,18 @@
-from pymj.hand_checker.base_hand_checker import HandChecker
+from pymj.hand_checker.base_hand_checker import BaseHandChecker
 from pymj.tiles.division import Division
 from pymj.tiles.hand_info import HandInfo
 
 
 def test_check_agari(mocker):
     # Given: mock hand checker and hand info
-    class MockHandChecker(HandChecker):
+    class MockBaseHandChecker(BaseHandChecker):
         def calculate_divisions(self, hand_info: HandInfo) -> list[Division]:
             return []
 
         def calculate_shanten(self, hand_info: HandInfo) -> int:
             return 0
 
-    mock_hand_checker = MockHandChecker()
+    mock_hand_checker = MockBaseHandChecker()
     mock_calculate_shanten = mocker.patch.object(
         mock_hand_checker, "calculate_shanten", autospec=True
     )

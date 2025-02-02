@@ -1,6 +1,6 @@
 from pymj.enums.division_part_state import DivisionPartState
 from pymj.enums.wait_type import WaitType
-from pymj.hand_checker.base_hand_checker import HandChecker
+from pymj.hand_checker.base_hand_checker import BaseHandChecker
 from pymj.tiles.division import Division
 from pymj.tiles.division_part import DivisionPart
 from pymj.tiles.hand_info import HandInfo
@@ -8,7 +8,7 @@ from pymj.tiles.tile import Tiles
 from pymj.tiles.tile_count import TileCount
 
 
-class SevenPairChecker(HandChecker):
+class SevenPairChecker(BaseHandChecker):
     """Check and calculate hand patterns of seven pairs."""
 
     def calculate_divisions(self, hand_info: HandInfo) -> list[Division]:
