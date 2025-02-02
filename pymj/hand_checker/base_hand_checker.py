@@ -10,7 +10,12 @@ class HandChecker(ABC):
     This abstract class provides methods to analyze tile combinations
     and validate winning conditions.
 
+    Attributes:
+            INFINITE_SHANTEN (int): Constant representing impossible hand arrangement.
+
     """
+
+    INFINITE_SHANTEN = 100
 
     @abstractmethod
     def calculate_shanten(self, hand_info: HandInfo) -> int:
