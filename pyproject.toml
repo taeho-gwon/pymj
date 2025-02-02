@@ -21,6 +21,7 @@ autoflake = "^2.3.1"
 isort = "^5.13.2"
 black = "^24.10.0"
 ruff = "^0.9.3"
+pytest-mock = "^3.14.0"
 
 [tool.black]
 line-length = 88

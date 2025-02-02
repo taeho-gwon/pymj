@@ -28,11 +28,6 @@ def test_create_from_hand_fail(tiles):
     with pytest.raises(ValueError):
         HandInfo.create_from_hand(hand, tiles["3m"])
 
-    # Then: raise error if neither drawn_tile nor agari_tile are exist.
-    hand.discard_tile()
-    with pytest.raises(ValueError):
-        HandInfo.create_from_hand(hand)
-
 
 def test_total_count(tiles):
     # Given: agari hand info

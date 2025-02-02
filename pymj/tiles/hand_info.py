@@ -63,13 +63,10 @@ class HandInfo:
             HandInfo: A new instance containing the hand information.
 
         Raises:
-            ValueError: If both drawn_tile and agari_tile are given or both are absent.
+            ValueError: If both drawn_tile and agari_tile are given.
 
         """
         if hand.drawn_tile and agari_tile:
-            raise ValueError
-
-        if not hand.drawn_tile and not agari_tile:
             raise ValueError
 
         concealed_counts = TileCount.create_from_tiles(hand.tiles)
