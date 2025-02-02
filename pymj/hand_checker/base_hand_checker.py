@@ -46,4 +46,4 @@ class HandChecker(ABC):
             bool: True if hand is complete, False otherwise.
 
         """
-        return self.calculate_shanten(hand_info) == 0
+        return self.calculate_shanten(hand_info) == -1
