@@ -19,4 +19,7 @@ class WaitType(Enum):
     EDGE_WAIT = auto()
     DUAL_PON_WAIT = auto()
     SIDE_WAIT = auto()
+
+    THIRTEEN_ORPHANS_13WAIT = auto()
+    THIRTEEN_ORPHANS_1WAIT = auto()
     ETC = auto()

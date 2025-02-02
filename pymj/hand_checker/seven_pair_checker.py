@@ -24,7 +24,7 @@ class SevenPairChecker(BaseHandChecker):
             ValueError: When hand cannot form seven pairs pattern.
 
         """
-        if not self.check_agari(hand_info):
+        if not hand_info.agari_tile or not self.check_agari(hand_info):
             raise ValueError
 
         division_parts = [
@@ -37,23 +37,18 @@ class SevenPairChecker(BaseHandChecker):
                 ),
             )
             for tile in Tiles.ALL
+            if hand_info.concealed_count[tile] > 0
         ]
         return [Division(division_parts, WaitType.SINGLE_WAIT)]
 
     def calculate_shanten(self, hand_info: HandInfo) -> int:
-        """Calculate shanten number for seven pairs pattern.
+        """Calculate shanten number for seven pairs hand pattern.
 
         Args:
-            hand_info (HandInfo): Contains info about hand.
+            hand_info: Contains information about tiles in hand and winning condition.
 
         Returns:
-            int: Number of tile arrangements needed, where:
-                -1: Complete hand
-                 0: Ready hand (tenpai)
-                >0: Number of arrangements needed
-
-        Raises:
-            ValueError: When hand does not contain exactly 13 concealed tiles.
+            int: Number of tiles away from tenpai, or INFINITE_SHANTEN if impossible.
 
         """
         if hand_info.concealed_count.num_tiles != 13:
