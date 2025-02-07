@@ -4,7 +4,7 @@ from pymj.enums.call_type import CallType
 from pymj.enums.division_part_state import DivisionPartState
 from pymj.enums.division_part_type import DivisionPartType
 from pymj.tiles.division_part import DivisionPart
-from pymj.tiles.tile import Tiles
+from pymj.tiles.tile_constants import Tiles
 from pymj.tiles.tile_count import TileCount
 
 

@@ -4,7 +4,7 @@ from pymj.hand_checker.base_hand_checker import BaseHandChecker
 from pymj.tiles.division import Division
 from pymj.tiles.division_part import DivisionPart
 from pymj.tiles.hand_info import HandInfo
-from pymj.tiles.tile import Tiles
+from pymj.tiles.tile_constants import Tiles
 from pymj.tiles.tile_count import TileCount
 
 

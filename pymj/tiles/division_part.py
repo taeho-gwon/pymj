@@ -3,7 +3,7 @@ from __future__ import annotations
 from pymj.enums.call_type import CallType
 from pymj.enums.division_part_state import DivisionPartState
 from pymj.enums.division_part_type import DivisionPartType
-from pymj.tiles.tile import Tiles
+from pymj.tiles.tile_constants import Tiles
 from pymj.tiles.tile_count import TileCount
 
 
@@ -120,7 +120,7 @@ class DivisionPart:
         return DivisionPart(
             division_part_type=DivisionPartType.THIRTEEN_ORPHANS,
             tile_count=TileCount.create_from_indices(
-                Tiles.TERMINALS_AND_HONORS + [head_tile_index]
+                (*Tiles.TERMINALS_AND_HONORS, head_tile_index)
             ),
             state=state,
         )
