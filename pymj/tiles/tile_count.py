@@ -263,7 +263,7 @@ class TileCount:
                 - Always returns a value >= the input index
 
         Raises:
-            ValueError: If the starting index is negative or greater than 33.
+            ValueError: If the starting index is negative or greater than 34.
 
         Examples:
             >>> # Initialize with counts of 1 at index 2 and 2 at index 4

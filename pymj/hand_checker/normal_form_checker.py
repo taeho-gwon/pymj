@@ -1,4 +1,4 @@
-from copy import copy, deepcopy
+from copy import deepcopy
 
 from pymj.enums.division_part_state import DivisionPartState
 from pymj.enums.division_part_type import DivisionPartType
@@ -44,17 +44,18 @@ class NormalFormChecker(BaseHandChecker):
         """
         self._best_shanten = self.INFINITE_SHANTEN
 
-        num_calls = len(hand_info.call_counts)
-        self._used_count = copy(hand_info.total_count)
-
-        self._tile_count = copy(hand_info.concealed_count)
-        if hand_info.agari_tile:
-            self._tile_count[TileMapping.tile_to_index(hand_info.agari_tile)] += 1
-
         if hand_info.concealed_count.num_tiles % 3 != 1:
             raise ValueError
 
-        if hand_info.concealed_count.num_tiles / 3 + num_calls != 4:
+        num_calls = len(hand_info.call_counts)
+        self._used_count = deepcopy(hand_info.total_count)
+        self._tile_count = deepcopy(hand_info.concealed_count)
+        if hand_info.agari_tile:
+            self._tile_count[TileMapping.tile_to_index(hand_info.agari_tile)] += 1
+
+        num_tiles = self._tile_count.num_tiles
+
+        if num_tiles // 3 + num_calls != 4:
             raise ValueError
 
         for head in Tiles.ALL:
@@ -73,11 +74,12 @@ class NormalFormChecker(BaseHandChecker):
         is_head_fixed: bool = True,
         index: int = 0,
     ) -> None:
-
-        index = self._tile_count.find_earliest_nonzero_index(index)
+        index = (
+            34 if index == 34 else self._tile_count.find_earliest_nonzero_index(index)
+        )
 
         if index == 34:
-            current_best_shanten = 5 - num_complete_sets - 2 * int(is_head_fixed)
+            current_best_shanten = 4 - num_complete_sets - int(is_head_fixed)
             if current_best_shanten >= self._best_shanten:
                 return
             self._calculate_best_shanten_step2(num_complete_sets, 0, is_head_fixed)
@@ -106,7 +108,9 @@ class NormalFormChecker(BaseHandChecker):
         is_head_fixed: bool,
         index: int = 0,
     ) -> None:
-        index = self._tile_count.find_earliest_nonzero_index(index)
+        index = (
+            34 if index == 34 else self._tile_count.find_earliest_nonzero_index(index)
+        )
 
         if num_complete_sets + num_partial_sets == 4 or index == 34:
             can_make_pair = is_head_fixed or any(
@@ -210,7 +214,7 @@ class NormalFormChecker(BaseHandChecker):
         if not hand_info.agari_tile or not self.check_agari(hand_info):
             raise ValueError
 
-        self._tile_count = copy(hand_info.concealed_count)
+        self._tile_count = deepcopy(hand_info.concealed_count)
         agari_tile_index = TileMapping.tile_to_index(hand_info.agari_tile)
         self._tile_count[agari_tile_index] += 1
 
@@ -237,13 +241,17 @@ class NormalFormChecker(BaseHandChecker):
             self._tile_count[head] -= 2
             head_part = DivisionPart.create_head(head, DivisionPartState.CONCEALED)
             self._parts.append(head_part)
-            self._find_bodies()
+            self._find_bodies(concealed_parts)
+            self._parts.pop()
             self._tile_count[head] += 2
         return concealed_parts
 
-    def _find_bodies(self, index: int = 0) -> None:
-        index = self._tile_count.find_earliest_nonzero_index(index)
+    def _find_bodies(self, parts: list[list[DivisionPart]], index: int = 0) -> None:
+        index = (
+            34 if index == 34 else self._tile_count.find_earliest_nonzero_index(index)
+        )
         if index == 34:
+            parts.append(deepcopy(self._parts))
             return
 
         for num_triplet in range(2):
@@ -253,7 +261,17 @@ class NormalFormChecker(BaseHandChecker):
                 self._tile_count[index] = 0
                 self._tile_count[index + 1] -= num_sequence
                 self._tile_count[index + 2] -= num_sequence
-                self._find_bodies(index + 1)
+                for _ in range(num_triplet):
+                    self._parts.append(
+                        DivisionPart.create_triple(index, DivisionPartState.CONCEALED)
+                    )
+                for _ in range(num_sequence):
+                    self._parts.append(
+                        DivisionPart.create_sequence(index, DivisionPartState.CONCEALED)
+                    )
+                self._find_bodies(parts, index + 1)
+                for _ in range(num_triplet + num_sequence):
+                    self._parts.pop()
                 self._tile_count[index] = 3 * num_triplet + num_sequence
                 self._tile_count[index + 1] += num_sequence
                 self._tile_count[index + 2] += num_sequence

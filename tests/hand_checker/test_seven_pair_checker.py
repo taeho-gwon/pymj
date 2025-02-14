@@ -25,7 +25,6 @@ def test_calculate_divisions(tiles):
 
     # Then: all seven parts are head
     assert len(divisions[0].parts) == 7
-    print(divisions[0].parts[0].__str__)
     assert all(part.type == DivisionPartType.HEAD for part in divisions[0].parts)
 
 

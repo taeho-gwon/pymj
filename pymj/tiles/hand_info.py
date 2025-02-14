@@ -92,8 +92,9 @@ class HandInfo:
         """
         total_count = sum(
             (call_count for _, call_count in self.call_counts),
-            start=self.concealed_count,
+            start=TileCount(),
         )
+        total_count = total_count + self.concealed_count
         if self.agari_tile:
             total_count[TileMapping.tile_to_index(self.agari_tile)] += 1
 
