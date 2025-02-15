@@ -17,28 +17,8 @@ python = "^3.12"
 pre-commit = "^4.1.0"
 mypy = "^1.14.1"
 pytest = "^8.3.4"
-autoflake = "^2.3.1"
 ruff = "^0.9.3"
 pytest-mock = "^3.14.0"
-black = "^25.1.0"
-
-[tool.black]
-line-length = 88
-target-version = ['py312']
-include = '\.pyi?$'
-extend-exclude = '''
-/(
-  # directories
-  \.eggs
-  | \.git
-  | \.hg
-  | \.mypy_cache
-  | \.tox
-  | \.venv
-  | build
-  | dist
-)/
-'''
 
 [tool.mypy]
 python_version = "3.12"
@@ -60,8 +40,25 @@ target-version = "py312"
 fix = true
 output-format = "grouped"
 
+[tool.ruff.format]
+quote-style = "double"
+indent-style = "space"
+skip-magic-trailing-comma = false
+line-ending = "auto"
+
 [tool.ruff.lint]
-select = ["E", "F", "I", "N", "W", "B", "C", "D"]
+select = [
+    "E",   # pycodestyle errors
+    "F",   # pyflakes
+    "I",   # isort
+    "N",   # pep8-naming
+    "W",   # pycodestyle warnings
+    "B",   # flake8-bugbear
+    "C",   # flake8-comprehensions
+    "D",   # pydocstring
+    "UP",  # pyupgrade
+    "RUF", # ruff-specific rules
+]
 ignore = ["D100", "D104", "D105", "D203", "D213"]
 
 [tool.ruff.lint.per-file-ignores]
@@ -69,7 +66,6 @@ ignore = ["D100", "D104", "D105", "D203", "D213"]
 
 [tool.ruff.lint.mccabe]
 max-complexity = 10
-
 
 [build-system]
 requires = ["poetry-core"]
