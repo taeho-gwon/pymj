@@ -21,7 +21,6 @@ autoflake = "^2.3.1"
 ruff = "^0.9.3"
 pytest-mock = "^3.14.0"
 black = "^25.1.0"
-isort = "^6.0.0"
 
 [tool.black]
 line-length = 88
@@ -40,12 +39,6 @@ extend-exclude = '''
   | dist
 )/
 '''
-
-[tool.isort]
-profile = "black"
-multi_line_output = 3
-line_length = 88
-src_paths = ["pymj"]
 
 [tool.mypy]
 python_version = "3.12"
