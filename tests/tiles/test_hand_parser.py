@@ -145,7 +145,8 @@ def test_parse_tile_group(tile_group_str, expected_strs, tiles):
 
 
 @pytest.mark.parametrize(
-    "tile_group_str", ["1239p123z", "z1234", "1238z", "1233n", "5645mm"]
+    "tile_group_str",
+    ["1239p123z", "z1234", "1238z", "1233n", "5645mm"],
 )
 def test_parse_tile_group_fail(tile_group_str):
     # When: parse_tile_group with invalid string
@@ -190,7 +191,11 @@ def test_parse_tile_group_fail(tile_group_str):
     ],
 )
 def test_parse_call(
-    call_str, expected_tile_strs, expected_call_type, expected_player_relation, tiles
+    call_str,
+    expected_tile_strs,
+    expected_call_type,
+    expected_player_relation,
+    tiles,
 ):
     # When: parse_call
     actual = HandParser.parse_call(call_str)
@@ -222,7 +227,9 @@ def test_parse_hand(tiles):
     hand.tiles = [tiles[tile_str] for tile_str in tile_strs]
 
     call1 = Call(
-        [tiles["3z"], tiles["3z"], tiles["3z"]], CallType.PON, PlayerRelation.ACROSS
+        [tiles["3z"], tiles["3z"], tiles["3z"]],
+        CallType.PON,
+        PlayerRelation.ACROSS,
     )
     call2 = Call([tiles["8p"], tiles["7p"], tiles["9p"]], CallType.CHII)
     hand.calls = [call1, call2]

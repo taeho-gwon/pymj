@@ -50,7 +50,9 @@ class HandInfo:
 
     @staticmethod
     def create_from_hand(
-        hand: Hand, agari_tile: Tile | None = None, is_tsumo: bool = False
+        hand: Hand,
+        agari_tile: Tile | None = None,
+        is_tsumo: bool = False,
     ) -> HandInfo:
         """Create an HandInfo instance from a Hand object.
 

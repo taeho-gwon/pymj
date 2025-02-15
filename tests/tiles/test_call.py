@@ -145,7 +145,10 @@ def test_init_fail_if_invalid_tiles(tile_strs, call_type, tiles):
     ],
 )
 def test_init_fail_if_invalid_player_relation(
-    tile_strs, call_type, player_relation, tiles
+    tile_strs,
+    call_type,
+    player_relation,
+    tiles,
 ):
     # Given: tiles for call and call type and invalid player relation
     call_tiles = [tiles[tile_str] for tile_str in tile_strs]

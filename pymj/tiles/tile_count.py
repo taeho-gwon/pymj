@@ -1,6 +1,7 @@
 from __future__ import annotations
 
-from typing import Iterable, Iterator, Sequence, SupportsIndex
+from collections.abc import Iterable, Iterator, Sequence
+from typing import SupportsIndex
 
 from pymj.tiles.tile import Tile
 from pymj.tiles.tile_mapping import TileMapping
@@ -185,7 +186,7 @@ class TileCount:
 
         """
         return TileCount(
-            [count1 + count2 for count1, count2 in zip(self, other, strict=False)]
+            [count1 + count2 for count1, count2 in zip(self, other, strict=False)],
         )
 
     def __getitem__(self, key: SupportsIndex) -> int:

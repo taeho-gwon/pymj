@@ -130,7 +130,10 @@ class NormalFormChecker(BaseHandChecker):
         if self._can_make_dual_pon_part(index):
             self._tile_count[index] -= 2
             self._calculate_best_shanten_step2(
-                num_complete_sets, num_partial_sets + 1, is_head_fixed, index
+                num_complete_sets,
+                num_partial_sets + 1,
+                is_head_fixed,
+                index,
             )
             self._tile_count[index] += 2
 
@@ -138,7 +141,10 @@ class NormalFormChecker(BaseHandChecker):
             self._tile_count[index] -= 1
             self._tile_count[index + 2] -= 1
             self._calculate_best_shanten_step2(
-                num_complete_sets, num_partial_sets + 1, is_head_fixed, index
+                num_complete_sets,
+                num_partial_sets + 1,
+                is_head_fixed,
+                index,
             )
             self._tile_count[index] += 1
             self._tile_count[index + 2] += 1
@@ -147,13 +153,19 @@ class NormalFormChecker(BaseHandChecker):
             self._tile_count[index] -= 1
             self._tile_count[index + 1] -= 1
             self._calculate_best_shanten_step2(
-                num_complete_sets, num_partial_sets + 1, is_head_fixed, index
+                num_complete_sets,
+                num_partial_sets + 1,
+                is_head_fixed,
+                index,
             )
             self._tile_count[index] += 1
             self._tile_count[index + 1] += 1
 
         self._calculate_best_shanten_step2(
-            num_complete_sets, num_partial_sets, is_head_fixed, index + 1
+            num_complete_sets,
+            num_partial_sets,
+            is_head_fixed,
+            index + 1,
         )
 
     def _can_make_triplet(self, index: int, num: int = 1) -> bool:
@@ -227,8 +239,11 @@ class NormalFormChecker(BaseHandChecker):
         for concealed_parts in self._calculate_concealed_parts():
             divisions.extend(
                 NormalFormChecker._calculate_divisions_from_division_parts(
-                    concealed_parts, call_parts, agari_tile_index, hand_info.is_tsumo
-                )
+                    concealed_parts,
+                    call_parts,
+                    agari_tile_index,
+                    hand_info.is_tsumo,
+                ),
             )
 
         return divisions
@@ -256,18 +271,22 @@ class NormalFormChecker(BaseHandChecker):
 
         for num_triplet in range(2):
             if self._can_make_triplet(index, num_triplet) and self._can_make_sequence(
-                index, num_sequence := self._tile_count[index] - num_triplet * 3
+                index,
+                num_sequence := self._tile_count[index] - num_triplet * 3,
             ):
                 self._tile_count[index] = 0
                 self._tile_count[index + 1] -= num_sequence
                 self._tile_count[index + 2] -= num_sequence
                 for _ in range(num_triplet):
                     self._parts.append(
-                        DivisionPart.create_triple(index, DivisionPartState.CONCEALED)
+                        DivisionPart.create_triple(index, DivisionPartState.CONCEALED),
                     )
                 for _ in range(num_sequence):
                     self._parts.append(
-                        DivisionPart.create_sequence(index, DivisionPartState.CONCEALED)
+                        DivisionPart.create_sequence(
+                            index,
+                            DivisionPartState.CONCEALED,
+                        ),
                     )
                 self._find_bodies(parts, index + 1)
                 for _ in range(num_triplet + num_sequence):
@@ -293,7 +312,8 @@ class NormalFormChecker(BaseHandChecker):
                 DivisionPartState.CONCEALED if is_tsumo else DivisionPartState.RON
             )
             wait_type = NormalFormChecker._calculate_wait_type(
-                temp_concealed_parts[idx], agari_tile_index
+                temp_concealed_parts[idx],
+                agari_tile_index,
             )
             divisions.append(Division(temp_concealed_parts + call_parts, wait_type))
         return divisions
