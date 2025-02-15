@@ -1,7 +1,7 @@
 import pytest
 
-from pymj.tiles.agari_hand_info import AgariHandInfo
 from pymj.tiles.hand import Hand
+from pymj.tiles.hand_info import HandInfo
 from pymj.tiles.tile_mapping import TileMapping
 
 
@@ -12,7 +12,7 @@ def test_create_from_hand(tiles):
     hand.draw_tile(agari_tile)
 
     # When : create_from_hand
-    agari_hand_info = AgariHandInfo.create_from_hand(hand, is_tsumo=True)
+    agari_hand_info = HandInfo.create_from_hand(hand, is_tsumo=True)
 
     # Then : attributes are expected
     assert agari_hand_info.agari_tile == agari_tile
@@ -26,18 +26,13 @@ def test_create_from_hand_fail(tiles):
 
     # Then: raise error if both drawn_tile and agari_tile are exist.
     with pytest.raises(ValueError):
-        AgariHandInfo.create_from_hand(hand, tiles["3m"])
-
-    # Then: raise error if neither drawn_tile nor agari_tile are exist.
-    hand.discard_tile()
-    with pytest.raises(ValueError):
-        AgariHandInfo.create_from_hand(hand)
+        HandInfo.create_from_hand(hand, tiles["3m"])
 
 
 def test_total_count(tiles):
     # Given: agari hand info
     tile_1m = tiles["1m"]
-    agari_hand_info = AgariHandInfo(agari_tile=tile_1m)
+    agari_hand_info = HandInfo(agari_tile=tile_1m)
 
     # When: total_count
     total_count = agari_hand_info.total_count

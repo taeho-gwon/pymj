@@ -147,7 +147,7 @@ class HandParser:
 
         Args:
         ----
-            hand_str: String representation of hand (e.g., "123m456p,c<789p")
+            hand_str (str): String representation of hand (e.g., "123m456p,c<789p")
 
         Returns:
         -------
