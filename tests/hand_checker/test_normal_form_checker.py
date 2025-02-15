@@ -1,9 +1,11 @@
 import pytest
 
+from pymj.enums.efficiency_data import EfficiencyData
 from pymj.enums.wait_type import WaitType
 from pymj.hand_checker.normal_form_checker import NormalFormChecker
 from pymj.tiles.hand_info import HandInfo
 from pymj.tiles.hand_parser import HandParser
+from pymj.tiles.tile_mapping import TileMapping
 
 
 @pytest.mark.parametrize(
@@ -56,3 +58,82 @@ def test_calculate_divisions(tiles):
 
     # Then: five parts exist
     assert len(divisions[0].parts) == 5
+
+
+@pytest.mark.parametrize(
+    "hand_str, expected",
+    [
+        (
+            "69m5678p2789s344z7p",
+            [
+                (
+                    "9m",
+                    [
+                        "4m",
+                        "5m",
+                        "6m",
+                        "7m",
+                        "8m",
+                        "6p",
+                        "9p",
+                        "1s",
+                        "2s",
+                        "3s",
+                        "4s",
+                        "3z",
+                        "4z",
+                    ],
+                    46,
+                ),
+                (
+                    "3z",
+                    [
+                        "4m",
+                        "5m",
+                        "6m",
+                        "7m",
+                        "8m",
+                        "9m",
+                        "6p",
+                        "9p",
+                        "1s",
+                        "2s",
+                        "3s",
+                        "4s",
+                        "4z",
+                    ],
+                    46,
+                ),
+                (
+                    "6m",
+                    ["7m", "8m", "9m", "6p", "9p", "1s", "2s", "3s", "4s", "3z", "4z"],
+                    38,
+                ),
+                (
+                    "2s",
+                    ["4m", "5m", "6m", "7m", "8m", "9m", "6p", "9p", "3z", "4z"],
+                    34,
+                ),
+            ],
+        ),
+    ],
+)
+def test_calculate_efficiency(hand_str, expected, tiles):
+    hand = HandParser.parse_hand(hand_str)
+    hand.draw_tile(hand.tiles[-1])
+    hand.discard_tile(13)
+    hand_info = HandInfo.create_from_hand(hand)
+
+    expected_efficiency = [
+        EfficiencyData(
+            discard_tile=TileMapping.tile_to_index(tiles[discard_tile_code]),
+            ukeire=[
+                TileMapping.tile_to_index(tiles[ukeire]) for ukeire in ukeire_codes
+            ],
+            num_ukeire=num_ukeire,
+        )
+        for discard_tile_code, ukeire_codes, num_ukeire in expected
+    ]
+
+    normal_form_checker = NormalFormChecker()
+    assert normal_form_checker.calculate_efficiency(hand_info) == expected_efficiency
