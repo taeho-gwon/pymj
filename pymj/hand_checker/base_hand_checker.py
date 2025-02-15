@@ -94,7 +94,7 @@ class BaseHandChecker(ABC):
                         discard_tile=discard_candidate,
                         ukeire=ukeire,
                         num_ukeire=num_ukeire,
-                    )
+                    ),
                 )
             new_hand_info.concealed_count[discard_candidate] += 1
 
@@ -102,7 +102,9 @@ class BaseHandChecker(ABC):
         return efficiency
 
     def _calculate_ukeire(
-        self, hand_info: HandInfo, shanten: int
+        self,
+        hand_info: HandInfo,
+        shanten: int,
     ) -> tuple[list[int], int]:
         ukeire = []
         num_ukeire = 0

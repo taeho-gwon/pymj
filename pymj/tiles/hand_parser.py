@@ -18,14 +18,14 @@ class HandParser:
         "p": TileType.PIN,
         "s": TileType.SOU,
     }
-    CALL_TYPE_MAP = {
+    CALL_TYPE_MAP: ClassVar[dict[str, CallType]] = {
         "c": CallType.CHII,
         "p": CallType.PON,
         "k": CallType.CONCEALED_KAN,
         "b": CallType.BIG_MELDED_KAN,
         "s": CallType.SMALL_MELDED_KAN,
     }
-    PLAYER_RELATION_MAP = {
+    PLAYER_RELATION_MAP: ClassVar[dict[str, PlayerRelation]] = {
         "<": PlayerRelation.PREV,
         "^": PlayerRelation.ACROSS,
         ">": PlayerRelation.NEXT,
@@ -113,7 +113,7 @@ class HandParser:
         # Parse call string
         match = re.match(r"([cpbks])([<^>_])(\d+[mpsz])", call_str)
         if not match:
-            raise ValueError(f"Invalid call format: {call_str}")
+            raise ValueError
 
         call_type_char = match.group(1)
         player_relation_char = match.group(2)
@@ -169,7 +169,7 @@ class HandParser:
             chain.from_iterable(
                 HandParser.parse_tile_group(group)
                 for group in re.findall(r"\d+[mpsz]", parts[0])
-            )
+            ),
         )
         hand.calls = [HandParser.parse_call(call_str) for call_str in parts[1:]]
         return hand

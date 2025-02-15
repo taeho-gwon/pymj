@@ -78,7 +78,8 @@ class DivisionPart:
 
     @staticmethod
     def create_sequence(
-        first_tile_index: int, state: DivisionPartState
+        first_tile_index: int,
+        state: DivisionPartState,
     ) -> DivisionPart:
         """Create a sequence of three consecutive numbered tiles.
 
@@ -98,14 +99,15 @@ class DivisionPart:
         return DivisionPart(
             division_part_type=DivisionPartType.SEQUENCE,
             tile_count=TileCount.create_from_indices(
-                [first_tile_index, first_tile_index + 1, first_tile_index + 2]
+                [first_tile_index, first_tile_index + 1, first_tile_index + 2],
             ),
             state=state,
         )
 
     @staticmethod
     def create_thirteen_orphans(
-        head_tile_index: int, state: DivisionPartState
+        head_tile_index: int,
+        state: DivisionPartState,
     ) -> DivisionPart:
         """Create a special combination for the Thirteen Orphans pattern.
 
@@ -120,7 +122,7 @@ class DivisionPart:
         return DivisionPart(
             division_part_type=DivisionPartType.THIRTEEN_ORPHANS,
             tile_count=TileCount.create_from_indices(
-                (*Tiles.TERMINALS_AND_HONORS, head_tile_index)
+                (*Tiles.TERMINALS_AND_HONORS, head_tile_index),
             ),
             state=state,
         )

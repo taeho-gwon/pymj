@@ -46,7 +46,10 @@ class ThirteenOrphanChecker(BaseHandChecker):
             DivisionPartState.CONCEALED if hand_info.is_tsumo else DivisionPartState.RON
         )
         return [
-            Division([DivisionPart.create_thirteen_orphans(head_idx, state)], wait_type)
+            Division(
+                [DivisionPart.create_thirteen_orphans(head_idx, state)],
+                wait_type,
+            ),
         ]
 
     def calculate_shanten(self, hand_info: HandInfo) -> int:

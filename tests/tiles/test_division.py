@@ -12,16 +12,20 @@ from pymj.tiles.tile_count import TileCount
 def sample_division():
     division_part1 = DivisionPart.create_head(0, DivisionPartState.RON)  # 1m head
     division_part2 = DivisionPart.create_triple(
-        1, DivisionPartState.CONCEALED
+        1,
+        DivisionPartState.CONCEALED,
     )  # 2m triple
     division_part3 = DivisionPart.create_from_call(
-        CallType.PON, TileCount.create_from_indices([7, 7, 7])
+        CallType.PON,
+        TileCount.create_from_indices([7, 7, 7]),
     )  # 8m pon
     division_part4 = DivisionPart.create_from_call(
-        CallType.CONCEALED_KAN, TileCount.create_from_indices([8, 8, 8, 8])
+        CallType.CONCEALED_KAN,
+        TileCount.create_from_indices([8, 8, 8, 8]),
     )  # 9m quads
     division_part5 = DivisionPart.create_from_call(
-        CallType.SMALL_MELDED_KAN, TileCount.create_from_indices([30, 30, 30, 30])
+        CallType.SMALL_MELDED_KAN,
+        TileCount.create_from_indices([30, 30, 30, 30]),
     )  # 9m quads
 
     return Division(

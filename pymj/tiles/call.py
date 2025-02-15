@@ -74,17 +74,14 @@ class Call:
         }
 
         if len(self.tiles) != tile_count_dict[self.call_type]:
-            raise ValueError(
-                f"{self.call_type.name} need exactly"
-                f"{tile_count_dict[self.call_type]} tiles, not {len(self.tiles)}."
-            )
+            raise ValueError
 
         if self.call_type is CallType.CHII:
             self._validate_chii()
 
         else:
             if not all(tile == self.tiles[0] for tile in self.tiles):
-                raise ValueError("Pon and Kan tiles must be the same tiles.")
+                raise ValueError
 
             if (
                 self.call_type is CallType.CONCEALED_KAN
@@ -109,12 +106,12 @@ class Call:
             self.tiles[1].tile_type is not tile_type
             or self.tiles[2].tile_type is not tile_type
         ):
-            raise ValueError("Chi tiles must be the same type.")
+            raise ValueError
 
         if tile_type not in {TileType.MAN, TileType.PIN, TileType.SOU}:
-            raise ValueError(f"{tile_type.name} cannot be chii tiles.")
+            raise ValueError
 
         numbers = sorted(tile.value for tile in self.tiles)
 
         if numbers[1] != numbers[0] + 1 or numbers[2] != numbers[1] + 1:
-            raise ValueError(f"chi tiles numbers {numbers} must be consecutive.")
+            raise ValueError

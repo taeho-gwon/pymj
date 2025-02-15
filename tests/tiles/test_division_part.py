@@ -115,4 +115,5 @@ def test_create_from_call(call_type, expected_part_type, expected_state, tile_in
 
     # Then: expected call part is created
     assert call_part.tile_count == tile_count
+    assert call_part.type == expected_part_type
     assert call_part.state == expected_state

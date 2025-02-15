@@ -6,15 +6,19 @@ from pymj.tiles.hand_info import HandInfo
 def test_check_agari(mocker):
     # Given: mock hand checker and hand info
     class MockBaseHandChecker(BaseHandChecker):
+        # ruff: noqa: ARG002
         def calculate_divisions(self, hand_info: HandInfo) -> list[Division]:
             return []
 
+        # ruff: noqa: ARG002
         def calculate_shanten(self, hand_info: HandInfo) -> int:
             return 0
 
     mock_hand_checker = MockBaseHandChecker()
     mock_calculate_shanten = mocker.patch.object(
-        mock_hand_checker, "calculate_shanten", autospec=True
+        mock_hand_checker,
+        "calculate_shanten",
+        autospec=True,
     )
     hand_info = HandInfo()
 
