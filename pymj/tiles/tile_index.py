@@ -29,7 +29,7 @@ class TileIndex:
             ValueError: If value is not between 0 and 33
 
         """
-        if not 0 <= self.value <= 33:
+        if not 0 <= self.value <= TileIndex.MAX_INDEX:
             raise ValueError
 
     def __str__(self) -> str:
