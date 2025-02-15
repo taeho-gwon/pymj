@@ -58,6 +58,7 @@ select = [
     "D",   # pydocstring
     "UP",  # pyupgrade
     "RUF", # ruff-specific rules
+    "COM", # flake8-commas
 ]
 ignore = ["D100", "D104", "D105", "D203", "D213"]
 

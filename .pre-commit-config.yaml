@@ -16,7 +16,9 @@ repos:
     rev: v0.9.3
     hooks:
     -   id: ruff
-        args: [--config=pyproject.toml, --fix, --exit-non-zero-on-fix]
+        args: [--config=pyproject.toml, --fix]
+    -   id: ruff-format
+        args: [--config=pyproject.toml]
 
 -   repo: local
     hooks:
