@@ -6,7 +6,7 @@ from pymj.enums.wait_type import WaitType
 from pymj.hand_checker.seven_pair_checker import SevenPairChecker
 from pymj.tiles.hand_info import HandInfo
 from pymj.tiles.hand_parser import HandParser
-from pymj.tiles.tile_mapping import TileMapping
+from pymj.tiles.tile_index import TileIndex
 
 
 def test_calculate_divisions(tiles):
@@ -87,9 +87,9 @@ def test_calculate_efficiency(hand_str, expected, tiles):
 
     expected_efficiency = [
         EfficiencyData(
-            discard_tile=TileMapping.tile_to_index(tiles[discard_tile_code]),
+            discard_tile=TileIndex.create_from_tile(tiles[discard_tile_code]),
             ukeire=[
-                TileMapping.tile_to_index(tiles[ukeire]) for ukeire in ukeire_codes
+                TileIndex.create_from_tile(tiles[ukeire]) for ukeire in ukeire_codes
             ],
             num_ukeire=num_ukeire,
         )

@@ -5,6 +5,7 @@ from pymj.enums.division_part_state import DivisionPartState
 from pymj.enums.division_part_type import DivisionPartType
 from pymj.tiles.tile_constants import Tiles
 from pymj.tiles.tile_count import TileCount
+from pymj.tiles.tile_index import TileIndex
 
 
 class DivisionPart:
@@ -41,7 +42,7 @@ class DivisionPart:
         self.state = state
 
     @staticmethod
-    def create_head(tile_index: int, state: DivisionPartState) -> DivisionPart:
+    def create_head(tile_index: TileIndex, state: DivisionPartState) -> DivisionPart:
         """Create a pair of identical tiles for use as a hand's head.
 
         Args:
@@ -59,7 +60,7 @@ class DivisionPart:
         )
 
     @staticmethod
-    def create_triple(tile_index: int, state: DivisionPartState) -> DivisionPart:
+    def create_triple(tile_index: TileIndex, state: DivisionPartState) -> DivisionPart:
         """Create a triple of identical tiles.
 
         Args:
@@ -78,7 +79,7 @@ class DivisionPart:
 
     @staticmethod
     def create_sequence(
-        first_tile_index: int,
+        first_tile_index: TileIndex,
         state: DivisionPartState,
     ) -> DivisionPart:
         """Create a sequence of three consecutive numbered tiles.
@@ -106,7 +107,7 @@ class DivisionPart:
 
     @staticmethod
     def create_thirteen_orphans(
-        head_tile_index: int,
+        head_tile_index: TileIndex,
         state: DivisionPartState,
     ) -> DivisionPart:
         """Create a special combination for the Thirteen Orphans pattern.

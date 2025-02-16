@@ -1,6 +1,7 @@
 import pytest
 
 from pymj.tiles.tile_count import TileCount
+from pymj.tiles.tile_index import TileIndex
 
 
 def test_num_tiles():
@@ -91,19 +92,13 @@ def test_find_earliest_nonzero_index():
     tile_count = TileCount(counts)
 
     # Then: earliest nonzero index is 0
-    assert tile_count.find_earliest_nonzero_index() == 0
+    assert tile_count.find_earliest_nonzero_index(TileIndex(0)) == 0
 
     # Then: earliest nonzero index greater than 1 is 3
-    assert tile_count.find_earliest_nonzero_index(1) == 3
+    assert tile_count.find_earliest_nonzero_index(TileIndex(1)) == 3
 
     # Then: earliest nonzero index greater than 10 is 34
-    assert tile_count.find_earliest_nonzero_index(10) == 34
-
-    # Then: raise error for invalid index
-    with pytest.raises(ValueError):
-        tile_count.find_earliest_nonzero_index(-1)
-    with pytest.raises(ValueError):
-        tile_count.find_earliest_nonzero_index(35)
+    assert tile_count.find_earliest_nonzero_index(TileIndex(10)) == 34
 
 
 def test_is_containing_only():

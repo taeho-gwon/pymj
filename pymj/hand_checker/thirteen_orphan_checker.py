@@ -6,7 +6,6 @@ from pymj.tiles.division_part import DivisionPart
 from pymj.tiles.hand_info import HandInfo
 from pymj.tiles.tile_constants import Tiles
 from pymj.tiles.tile_count import TileCount
-from pymj.tiles.tile_mapping import TileMapping
 
 
 class ThirteenOrphanChecker(BaseHandChecker):
@@ -32,7 +31,7 @@ class ThirteenOrphanChecker(BaseHandChecker):
         )
         if is_thirteen_waits:
             wait_type = WaitType.THIRTEEN_ORPHANS_13WAIT
-            head_idx = TileMapping.tile_to_index(hand_info.agari_tile)
+            head_idx = hand_info.agari_tile
 
         else:
             wait_type = WaitType.THIRTEEN_ORPHANS_1WAIT
@@ -66,8 +65,8 @@ class ThirteenOrphanChecker(BaseHandChecker):
             return self.INFINITE_SHANTEN
 
         agari_tile_count = (
-            TileCount.create_from_tiles([hand_info.agari_tile])
-            if hand_info.agari_tile
+            TileCount.create_from_indices([hand_info.agari_tile])
+            if hand_info.agari_tile is not None
             else TileCount()
         )
         real_tile_count = hand_info.concealed_count + agari_tile_count

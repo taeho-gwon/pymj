@@ -2,6 +2,8 @@ from __future__ import annotations
 
 from dataclasses import dataclass
 
+from pymj.tiles.tile_index import TileIndex
+
 
 @dataclass
 class EfficiencyData:
@@ -14,6 +16,6 @@ class EfficiencyData:
 
     """
 
-    discard_tile: int
-    ukeire: list[int]
+    discard_tile: TileIndex
+    ukeire: list[TileIndex]
     num_ukeire: int

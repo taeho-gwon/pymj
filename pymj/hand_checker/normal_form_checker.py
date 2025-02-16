@@ -9,7 +9,7 @@ from pymj.tiles.division_part import DivisionPart
 from pymj.tiles.hand_info import HandInfo
 from pymj.tiles.tile_constants import Tiles
 from pymj.tiles.tile_count import TileCount
-from pymj.tiles.tile_mapping import TileMapping
+from pymj.tiles.tile_index import TileIndex
 
 
 class NormalFormChecker(BaseHandChecker):
@@ -51,7 +51,7 @@ class NormalFormChecker(BaseHandChecker):
         self._used_count = deepcopy(hand_info.total_count)
         self._tile_count = deepcopy(hand_info.concealed_count)
         if hand_info.agari_tile:
-            self._tile_count[TileMapping.tile_to_index(hand_info.agari_tile)] += 1
+            self._tile_count[hand_info.agari_tile] += 1
 
         num_tiles = self._tile_count.num_tiles
 
@@ -62,57 +62,56 @@ class NormalFormChecker(BaseHandChecker):
             if self._tile_count[head] < 2:
                 continue
             self._tile_count[head] -= 2
-            self._calculate_best_shanten(num_calls)
+            self._calculate_best_shanten(num_calls, TileIndex(0))
             self._tile_count[head] += 2
 
-        self._calculate_best_shanten(num_calls, is_head_fixed=False)
+        self._calculate_best_shanten(num_calls, TileIndex(0), is_head_fixed=False)
         return self._best_shanten
 
     def _calculate_best_shanten(
         self,
         num_complete_sets: int,
+        index: TileIndex,
         is_head_fixed: bool = True,
-        index: int = 0,
     ) -> None:
-        index = (
-            34 if index == 34 else self._tile_count.find_earliest_nonzero_index(index)
-        )
-
+        index = self._tile_count.find_earliest_nonzero_index(index)
         if index == 34:
             current_best_shanten = 4 - num_complete_sets - int(is_head_fixed)
-            if current_best_shanten >= self._best_shanten:
-                return
-            self._calculate_best_shanten_step2(num_complete_sets, 0, is_head_fixed)
+            if current_best_shanten < self._best_shanten:
+                self._calculate_best_shanten_step2(
+                    num_complete_sets,
+                    0,
+                    is_head_fixed,
+                    TileIndex(0),
+                )
             return
 
         if self._can_make_triplet(index):
             self._tile_count[index] -= 3
-            self._calculate_best_shanten(num_complete_sets + 1, is_head_fixed, index)
+            self._calculate_best_shanten(num_complete_sets + 1, index, is_head_fixed)
             self._tile_count[index] += 3
 
         if self._can_make_sequence(index):
             self._tile_count[index] -= 1
             self._tile_count[index + 1] -= 1
             self._tile_count[index + 2] -= 1
-            self._calculate_best_shanten(num_complete_sets + 1, is_head_fixed, index)
+            self._calculate_best_shanten(num_complete_sets + 1, index, is_head_fixed)
             self._tile_count[index] += 1
             self._tile_count[index + 1] += 1
             self._tile_count[index + 2] += 1
 
-        self._calculate_best_shanten(num_complete_sets, is_head_fixed, index + 1)
+        self._calculate_best_shanten(num_complete_sets, index + 1, is_head_fixed)
 
     def _calculate_best_shanten_step2(
         self,
         num_complete_sets: int,
         num_partial_sets: int,
         is_head_fixed: bool,
-        index: int = 0,
+        index: TileIndex,
     ) -> None:
-        index = (
-            34 if index == 34 else self._tile_count.find_earliest_nonzero_index(index)
-        )
+        index = self._tile_count.find_earliest_nonzero_index(index)
 
-        if num_complete_sets + num_partial_sets == 4 or index == 34:
+        if num_complete_sets + num_partial_sets == 4 or index == TileIndex(34):
             can_make_pair = is_head_fixed or any(
                 self._tile_count[tile] == 1 and self._used_count[tile] < 4
                 for tile in Tiles.ALL
@@ -169,6 +168,7 @@ class NormalFormChecker(BaseHandChecker):
         )
 
     def _can_make_triplet(self, index: int, num: int = 1) -> bool:
+        print(index)
         return self._tile_count[index] >= 3 * num
 
     def _can_make_sequence(self, index: int, num: int = 1) -> bool:
@@ -227,8 +227,7 @@ class NormalFormChecker(BaseHandChecker):
             raise ValueError
 
         self._tile_count = deepcopy(hand_info.concealed_count)
-        agari_tile_index = TileMapping.tile_to_index(hand_info.agari_tile)
-        self._tile_count[agari_tile_index] += 1
+        self._tile_count[hand_info.agari_tile] += 1
 
         call_parts = [
             DivisionPart.create_from_call(call_type, tile_count)
@@ -241,7 +240,7 @@ class NormalFormChecker(BaseHandChecker):
                 NormalFormChecker._calculate_divisions_from_division_parts(
                     concealed_parts,
                     call_parts,
-                    agari_tile_index,
+                    hand_info.agari_tile,
                     hand_info.is_tsumo,
                 ),
             )
@@ -256,15 +255,18 @@ class NormalFormChecker(BaseHandChecker):
             self._tile_count[head] -= 2
             head_part = DivisionPart.create_head(head, DivisionPartState.CONCEALED)
             self._parts.append(head_part)
-            self._find_bodies(concealed_parts)
+            self._find_bodies(concealed_parts, TileIndex(0))
             self._parts.pop()
             self._tile_count[head] += 2
         return concealed_parts
 
-    def _find_bodies(self, parts: list[list[DivisionPart]], index: int = 0) -> None:
-        index = (
-            34 if index == 34 else self._tile_count.find_earliest_nonzero_index(index)
-        )
+    def _find_bodies(
+        self,
+        parts: list[list[DivisionPart]],
+        index: TileIndex,
+    ) -> None:
+        index = self._tile_count.find_earliest_nonzero_index(index)
+
         if index == 34:
             parts.append(deepcopy(self._parts))
             return

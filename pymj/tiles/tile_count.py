@@ -4,7 +4,7 @@ from collections.abc import Iterable, Iterator, Sequence
 from typing import SupportsIndex
 
 from pymj.tiles.tile import Tile
-from pymj.tiles.tile_mapping import TileMapping
+from pymj.tiles.tile_index import TileIndex
 
 
 class TileCount:
@@ -54,9 +54,9 @@ class TileCount:
 
         """
         if counts is None:
-            self._counts = [0] * 34
+            self._counts = [0] * TileIndex.SIZE
         else:
-            if len(counts) != 34:
+            if len(counts) != TileIndex.SIZE:
                 raise ValueError
             self._counts = counts[:]
 
@@ -80,7 +80,7 @@ class TileCount:
         return sum(self._counts)
 
     @staticmethod
-    def create_from_indices(tiles: Iterable[int]) -> TileCount:
+    def create_from_indices(tiles: Iterable[TileIndex]) -> TileCount:
         """Create a new TileCount instance from a sequence of tile indices.
 
         A factory method that creates a TileCount by counting occurrences of numerical
@@ -130,7 +130,7 @@ class TileCount:
 
         """
         return TileCount.create_from_indices(
-            TileMapping.tile_to_index(tile) for tile in tiles
+            TileIndex.create_from_tile(tile) for tile in tiles
         )
 
     def __eq__(self, other: object) -> bool:
@@ -244,7 +244,7 @@ class TileCount:
         """
         return iter(self._counts)
 
-    def find_earliest_nonzero_index(self, index: int = 0) -> int:
+    def find_earliest_nonzero_index(self, index: TileIndex) -> TileIndex:
         """Find the first index with a positive count.
 
         This method performs a linear search through the tile counts,
@@ -269,15 +269,14 @@ class TileCount:
         Examples:
             >>> # Initialize with counts of 1 at index 2 and 2 at index 4
             >>> tc = TileCount([0,0,1,0,2,0] + [0]*28)
-            >>> tc.find_earliest_nonzero_index()  # Search from beginning
-            2
-            >>> tc.find_earliest_nonzero_index(3)  # Search starting from index 3
-            4
+            >>> # Search from beginning
+            >>> tc.find_earliest_nonzero_index(TileIndex(0))
+            TileIndex(2)
+            >>> # Search starting from index 3
+            >>> tc.find_earliest_nonzero_index(TileIndex(3))
+            TileIndex(4)
 
         """
-        if index < 0 or index > 33:
-            raise ValueError
-
         while index < len(self._counts) and self._counts[index] == 0:
             index += 1
         return index

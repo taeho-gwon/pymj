@@ -2,9 +2,8 @@ from __future__ import annotations
 
 from pymj.enums.call_type import CallType
 from pymj.tiles.hand import Hand
-from pymj.tiles.tile import Tile
 from pymj.tiles.tile_count import TileCount
-from pymj.tiles.tile_mapping import TileMapping
+from pymj.tiles.tile_index import TileIndex
 
 
 class HandInfo:
@@ -25,7 +24,7 @@ class HandInfo:
         self,
         concealed_count: TileCount | None = None,
         call_counts: list[tuple[CallType, TileCount]] | None = None,
-        agari_tile: Tile | None = None,
+        agari_tile: TileIndex | None = None,
         is_tsumo: bool = False,
     ):
         """Initialize an HandInfo instance.
@@ -35,7 +34,7 @@ class HandInfo:
                 Count of concealed tiles. Defaults to None.
             call_counts (list[tuple[CallType, TileCount]] | None, optional):
                 List of calls. Defaults to None.
-            agari_tile (Tile | None, optional): The winning tile. Defaults to None.
+            agari_tile (TileIndex | None, optional): The winning tile. Defaults to None.
             is_tsumo (bool, optional): Whether won by self-draw. Defaults to False.
 
         """
@@ -51,7 +50,7 @@ class HandInfo:
     @staticmethod
     def create_from_hand(
         hand: Hand,
-        agari_tile: Tile | None = None,
+        agari_tile: TileIndex | None = None,
         is_tsumo: bool = False,
     ) -> HandInfo:
         """Create an HandInfo instance from a Hand object.
@@ -77,10 +76,13 @@ class HandInfo:
             for call in hand.calls
         ]
 
+        if hand.drawn_tile is not None:
+            agari_tile = TileIndex.create_from_tile(hand.drawn_tile)
+
         return HandInfo(
             concealed_count=concealed_counts,
             call_counts=call_counts,
-            agari_tile=agari_tile or hand.drawn_tile,
+            agari_tile=agari_tile,
             is_tsumo=is_tsumo,
         )
 
@@ -97,7 +99,7 @@ class HandInfo:
             start=TileCount(),
         )
         total_count = total_count + self.concealed_count
-        if self.agari_tile:
-            total_count[TileMapping.tile_to_index(self.agari_tile)] += 1
+        if self.agari_tile is not None:
+            total_count[self.agari_tile] += 1
 
         return total_count

@@ -55,7 +55,7 @@ class SevenPairChecker(BaseHandChecker):
             return self.INFINITE_SHANTEN
 
         agari_tile_count = (
-            TileCount.create_from_tiles([hand_info.agari_tile])
+            TileCount.create_from_indices([hand_info.agari_tile])
             if hand_info.agari_tile
             else TileCount()
         )

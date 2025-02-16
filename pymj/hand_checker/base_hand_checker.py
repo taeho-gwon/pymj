@@ -5,7 +5,7 @@ from pymj.enums.efficiency_data import EfficiencyData
 from pymj.tiles.division import Division
 from pymj.tiles.hand_info import HandInfo
 from pymj.tiles.tile_constants import Tiles
-from pymj.tiles.tile_mapping import TileMapping
+from pymj.tiles.tile_index import TileIndex
 
 
 class BaseHandChecker(ABC):
@@ -77,9 +77,7 @@ class BaseHandChecker(ABC):
         efficiency = []
 
         new_hand_info = deepcopy(hand_info)
-        new_hand_info.concealed_count[
-            TileMapping.tile_to_index(hand_info.agari_tile)
-        ] += 1
+        new_hand_info.concealed_count[hand_info.agari_tile] += 1
         new_hand_info.agari_tile = None
 
         for discard_candidate in Tiles.ALL:
@@ -105,14 +103,14 @@ class BaseHandChecker(ABC):
         self,
         hand_info: HandInfo,
         shanten: int,
-    ) -> tuple[list[int], int]:
+    ) -> tuple[list[TileIndex], int]:
         ukeire = []
         num_ukeire = 0
         total_count = hand_info.total_count
         for draw_candidate in Tiles.ALL:
             if total_count[draw_candidate] == 4:
                 continue
-            hand_info.agari_tile = TileMapping.index_to_tile(draw_candidate)
+            hand_info.agari_tile = draw_candidate
             if shanten - 1 == self.calculate_shanten(hand_info):
                 ukeire.append(draw_candidate)
                 num_ukeire += 4 - total_count[draw_candidate]

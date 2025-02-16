@@ -1,10 +1,12 @@
 from dataclasses import dataclass
 
-_MANS = tuple(range(9))
-_PINS = tuple(range(9, 18))
-_SOUS = tuple(range(18, 27))
-_WINDS = (27, 28, 29, 30)
-_DRAGONS = (31, 32, 33)
+from pymj.tiles.tile_index import TileIndex
+
+_MANS = tuple(TileIndex(i) for i in range(9))
+_PINS = tuple(TileIndex(i) for i in range(9, 18))
+_SOUS = tuple(TileIndex(i) for i in range(18, 27))
+_WINDS = tuple(TileIndex(i) for i in range(27, 31))
+_DRAGONS = tuple(TileIndex(i) for i in range(31, 34))
 
 _NUMBERS = _MANS + _PINS + _SOUS
 _HONORS = _WINDS + _DRAGONS
