@@ -244,7 +244,7 @@ class TileCount:
         """
         return iter(self._counts)
 
-    def find_earliest_nonzero_index(self, index: TileIndex) -> TileIndex:
+    def find_earliest_nonzero_index(self, index: int) -> TileIndex:
         """Find the first index with a positive count.
 
         This method performs a linear search through the tile counts,
@@ -277,9 +277,10 @@ class TileCount:
             TileIndex(4)
 
         """
-        while index < len(self._counts) and self._counts[index] == 0:
-            index += 1
-        return index
+        i = int(index)
+        while i < len(self._counts) and self._counts[i] == 0:
+            i += 1
+        return TileIndex(i)
 
     def is_containing_only(self, indices: Sequence[int]) -> bool:
         """Verify that non-zero tile counts exist only at the specified indices.

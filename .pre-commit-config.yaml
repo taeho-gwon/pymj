@@ -24,10 +24,10 @@ repos:
     hooks:
     -   id: pytest
         name: Run pytest
-        entry: poetry run pytest
+        entry: uv run pytest
         language: system
         types: [python]
         pass_filenames: false
 
 default_language_version:
-  python: python3.12
+  python: python3.13
